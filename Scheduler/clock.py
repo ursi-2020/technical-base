@@ -1,9 +1,9 @@
-from datetime import datetime, timedelta
+from datetime import datetime
+
 
 class Clock:
-
-    paused : bool = False
-    paused_time : datetime = None
+    paused: bool = False
+    paused_time: datetime = None
     real_start: datetime = None
     start: datetime = None
     speed: float = 1
@@ -16,7 +16,7 @@ class Clock:
     def get_speed(self) -> float:
         return self.speed
 
-    def set_speed(self, speed : float) -> float:
+    def set_speed(self, speed: float) -> float:
         real_current = datetime.now()
         current = self.get_time(real_current)
         self.speed = speed if speed > 0 else self.speed
@@ -27,7 +27,7 @@ class Clock:
     def get_time(self, current: datetime = None) -> datetime:
         if self.paused:
             return self.paused_time
-        if current == None:
+        if current is None:
             current = datetime.now()
         return self.start + (current - self.real_start) * self.speed
 
@@ -41,18 +41,19 @@ class Clock:
             self.real_start = datetime.now()
             self.start = self.paused_time
             self.paused = False
-    
+
     def __str__(self) -> str:
         current = self.get_time()
         real_current = datetime.now()
         return "[Clock]" \
-            + "\n---------------------" \
-            + "\n|      Initial Time : " + str(self.start) \
-            + "\n| Initial Real Time : " + str(self.real_start) \
-            + "\n|            Offset : " + str(self.start - self.real_start) \
-            + "\n|             Speed : " + str(self.speed) \
-            + "\n|      CURRENT TIME : " + str(current) \
-            + "\n| Current Real Time : " + str(real_current) \
-            + "\n---------------------"
+               + "\n---------------------" \
+               + "\n|      Initial Time : " + str(self.start) \
+               + "\n| Initial Real Time : " + str(self.real_start) \
+               + "\n|            Offset : " + str(self.start - self.real_start) \
+               + "\n|             Speed : " + str(self.speed) \
+               + "\n|      CURRENT TIME : " + str(current) \
+               + "\n| Current Real Time : " + str(real_current) \
+               + "\n---------------------"
 
-clock : Clock = None
+
+clock: Clock = None
