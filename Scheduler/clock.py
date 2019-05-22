@@ -13,9 +13,6 @@ class Clock:
         self.start = start_time
         self.speed = speed if speed > 0 else 1
 
-    def get_speed(self) -> float:
-        return self.speed
-
     def set_speed(self, speed: float) -> float:
         real_current = datetime.now()
         current = self.get_time(real_current)
@@ -54,6 +51,3 @@ class Clock:
                + "\n|      CURRENT TIME : " + str(current) \
                + "\n| Current Real Time : " + str(real_current) \
                + "\n---------------------"
-
-
-clock: Clock = None
