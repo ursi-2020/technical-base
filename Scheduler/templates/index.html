@@ -1,38 +1,75 @@
 {% extends "layout.html" %}
 {% block title %}Index{% endblock %}
 {% block content %}
-  <script>
-  document.addEventListener('submit', function(event) {
-    event.path['0'].action += "?new=" + event.path['0'].firstElementChild.value
-  });
-  </script>
-  <h2>Informations</h2>
-  <h3>Time: {{time}}</h3>
-  <h3>Speed: {{speed}}x</h3>
-  {% if paused %}
-    <h3 style="color:orange">Status: Paused</h3>
-  {% else %}
-    <h3 style="color:limegreen">Status: Running</h3>
-  {% endif %}
-  <h2>Actions</h2>
-  <form id='set_speed' action="/speed" method="post" target="nowhere">
-    <input name='new' placeholder="new speed" type="number" required min="0" step="0.1">
-    <input type='submit' value="Change speed">
-  </form>
-  <iframe name="nowhere" style="display:none"></iframe>
-  <h2>Scheduled tasks</h2>
-  <table id="fancy_table">
-    <tr>
-      <th>Scheduled time</th>
-      <th>Target</th> 
-      <th>Reccurrence</th>
-    </tr>
-    {% for item in scheduled_list %}
-      <tr>
-        <th>{{item[0]}}</th>
-        <th>{{item[1]}}</th> 
-        <th>{{item[2]}}</th>
-      </tr>
-    {% endfor %}
-  </table>
+    <style>
+        iframe:focus {
+            outline: none;
+        }
+
+        iframe[seamless] {
+            display: block;
+            width: 100%;
+            border: none;
+        }
+    </style>
+    <script>
+        id = 0;
+        document.addEventListener('submit', function (event) {
+            event.path['0'].action += "?new=" + event.path['0'].firstElementChild.value
+        });
+
+        function update_table() {
+            fetch("/schedule/list")
+                .then(function (response) {
+                    return response.text();
+                })
+                .then(function (data) {
+                    document.getElementById("table").innerHTML = data;
+                    setTimeout(update_table, 10000)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    setTimeout(update_table, 10000)
+                })
+        }
+
+        update_table();
+
+        function update_time() {
+            fetch("/clock/info")
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    document.getElementById("current_time").innerHTML = "Time: " + data[0];
+                    document.getElementById("current_speed").innerHTML = "Speed: " + data[1] + "x";
+                    let status = data[2] === "True" ? "Paused" : "Running";
+                    document.getElementById("current_status").style.color = data[2] === "True" ? "orange" : "limegreen";
+                    document.getElementById("current_status").innerHTML = "Status: " + status;
+                    setTimeout(update_time, 1000)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    setTimeout(update_time, 1000)
+                })
+        }
+
+        update_time();
+
+    </script>
+    <h2>Informations</h2>
+    <h3 id="current_time"></h3>
+    <h3 id="current_speed"></h3>
+    <h3 id="current_status"></h3>
+    <h2>Actions</h2>
+    <form id='set_speed' action="/speed" method="post" target="nowhere">
+        <label>
+            <input name='new' placeholder="new speed" type="number" required min="0" step="0.1">
+        </label>
+        <input type='submit' value="Change speed">
+    </form>
+    <div id="table">
+
+    </div>
+    <iframe name="nowhere" style="display:none"></iframe>
 {% endblock %}

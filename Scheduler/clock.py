@@ -28,16 +28,20 @@ class Clock:
             current = datetime.now()
         return self.start + (current - self.real_start) * self.speed
 
-    def pause(self) -> None:
+    def pause(self) -> bool:
         if not self.paused:
             self.paused_time = self.get_time()
             self.paused = True
+            return True
+        return False
 
-    def resume(self) -> None:
+    def resume(self) -> bool:
         if self.paused:
             self.real_start = datetime.now()
             self.start = self.paused_time
             self.paused = False
+            return True
+        return False
 
     def __str__(self) -> str:
         current = self.get_time()

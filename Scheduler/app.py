@@ -1,60 +1,90 @@
-from flask import Flask, request, abort, render_template
+from flask import Flask, request, abort, render_template, jsonify
 from scheduler import Scheduler
 from clock import Clock
 import signal
 
 app = Flask(__name__)
-clk : Clock = None
-sch : Scheduler = None
+clk: Clock = Clock(speed=200.0)
+sch: Scheduler = Scheduler(clk)
+
+'''
+ROUTES
+'''
 
 
 @app.route('/', methods=['GET', 'POST'])
 def dashboard():
     # print(e) # TODO Logger
-    return render_template("index.html", scheduled_list = sch.schedule_list, time = clk.get_time(), speed = clk.speed, paused = clk.paused)
+    return render_template("index.html", speed=clk.speed, paused=clk.paused)
 
-@app.route('/speed', methods=['GET', 'POST'])
-def speed():
+
+@app.route('/schedule/size', methods=['GET'])
+def get_schedule_size():
+    return str(len(sch.schedule_list))
+
+
+@app.route('/schedule/list', methods=['GET'])
+def get_schedule_list():
+    return render_template("schedule_table.html", scheduled_list=sch.schedule_list)
+
+
+@app.route('/schedule/add', methods=["POST"])
+def schedule_message():
+    # print(e) # TODO Logger
+    if 'target_url' not in request.args.keys():
+        abort(422)
+    if 'time' not in request.args.keys():
+        abort(422)
+    result = sch.schedule(request.args.get('target_url'), request.args.get('time'), request.args.get('recurrence'),
+                          request.get_data(as_text=True))
+    if not result:
+        abort(422)
+    return "Task has been scheduled"
+
+
+@app.route('/clock/speed', methods=['GET', 'POST'])
+def get_set_speed():
     print(request)
     # print(e) # TODO Logger
-    if not 'new' in request.args.keys():
+    if request.method == 'GET' or not 'new' in request.args.keys():
         return str(clk.speed)
     new_speed = request.args.get('new')
     new_speed = float(new_speed)
     clk.set_speed(new_speed)
     return str(clk.speed)
 
-@app.route('/schedule', methods=["POST"])
-def schedule_message():
-    # print(e) # TODO Logger
-    if not 'target_url' in request.args.keys():
+
+@app.route('/clock/pause', methods=['POST'])
+def pause_clock():
+    if not clk.pause():
         abort(422)
-    if not 'time' in request.args.keys():
+    return 'success'
+
+
+@app.route('/clock/resume', methods=['POST'])
+def resume_clock():
+    if not clk.resume():
         abort(422)
-
-    result = sch.schedule(request.args.get('target_url'), request.args.get('time'),
-                                request.args.get('recurrence'), request.get_data(as_text=True))
-
-    if not result:
-        abort(422)
-
-    return "Task has been scheduled"
+    return 'success'
 
 
-@app.route('/time')
+@app.route('/clock/time', methods=['GET', 'POST'])
 def get_time():
     # print(e) # TODO Logger
     return str(clk.get_time().strftime(sch.time_format))
 
 
-def keyboard_interrupt_handler(signal, frame):
-    print("KeyboardInterrupt (ID: {}) has been caught. Cleaning up...".format(signal))
+@app.route('/clock/info', methods=['GET'])
+def get_info():
+    return jsonify((str(clk.get_time().strftime(sch.time_format)), str(clk.speed), str(clk.paused)))
+
+
+def keyboard_interrupt_handler(sgn, frame):
+    print("KeyboardInterrupt (ID: {}) has been caught. Cleaning up...".format(sgn))
     sch.close()
     exit(0)
 
 
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, keyboard_interrupt_handler)
-    clk = Clock(speed=10)
-    sch = Scheduler(clk)
     app.run(host='localhost', port=5000)
