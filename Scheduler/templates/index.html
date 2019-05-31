@@ -13,10 +13,18 @@
         }
     </style>
     <script>
-        id = 0;
-        document.addEventListener('submit', function (event) {
-            event.path['0'].action += "?new=" + event.path['0'].firstElementChild.value
-        });
+        function set_time() {
+            let input = document.getElementById("new_speed");
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "/clock/speed?new=" + input.value, true);
+            xhr.send(null)
+        }
+
+        function pause_resume() {
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "/clock/switch", true);
+            xhr.send(null)
+        }
 
         function update_table() {
             fetch("/schedule/list")
@@ -25,11 +33,11 @@
                 })
                 .then(function (data) {
                     document.getElementById("table").innerHTML = data;
-                    setTimeout(update_table, 10000)
+                    setTimeout(update_table, 1000)
                 })
                 .catch(function (error) {
                     console.log(error);
-                    setTimeout(update_table, 10000)
+                    setTimeout(update_table, 1000)
                 })
         }
 
@@ -44,6 +52,7 @@
                     document.getElementById("current_time").innerHTML = "Time: " + data[0];
                     document.getElementById("current_speed").innerHTML = "Speed: " + data[1] + "x";
                     let status = data[2] === "True" ? "Paused" : "Running";
+                    document.getElementById("pause_resume").value = data[2] === "True" ? "Resume" : "Pause";
                     document.getElementById("current_status").style.color = data[2] === "True" ? "orange" : "limegreen";
                     document.getElementById("current_status").innerHTML = "Status: " + status;
                     setTimeout(update_time, 1000)
@@ -62,14 +71,15 @@
     <h3 id="current_speed"></h3>
     <h3 id="current_status"></h3>
     <h2>Actions</h2>
-    <form id='set_speed' action="/speed" method="post" target="nowhere">
-        <label>
-            <input name='new' placeholder="new speed" type="number" required min="0" step="0.1">
-        </label>
-        <input type='submit' value="Change speed">
-    </form>
+    <div style="margin-bottom: 1%">
+        <input id='new_speed' placeholder="new speed" type="number" required min="0" step="0.1">
+        <input type='button' value="Change speed" onclick="set_time()">
+    </div>
+    <div>
+        <input id='pause_resume' type='button' value="" onclick="pause_resume()">
+    </div>
+    <h2>List</h2>
     <div id="table">
-
     </div>
     <iframe name="nowhere" style="display:none"></iframe>
 {% endblock %}

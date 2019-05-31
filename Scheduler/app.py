@@ -2,9 +2,13 @@ from flask import Flask, request, abort, render_template, jsonify
 from scheduler import Scheduler
 from clock import Clock
 import signal
+import sys
 
 app = Flask(__name__)
-clk: Clock = Clock(speed=200.0)
+speed = 50.0
+if len(sys.argv) > 1:
+    speed = sys.argv[1]
+clk: Clock = Clock(speed=speed)
 sch: Scheduler = Scheduler(clk)
 
 '''
@@ -67,6 +71,12 @@ def resume_clock():
         abort(422)
     return 'success'
 
+
+@app.route('/clock/switch', methods=['POST'])
+def switch_state_clock():
+    if not clk.resume():
+        clk.pause()
+    return 'success'
 
 @app.route('/clock/time', methods=['GET', 'POST'])
 def get_time():
