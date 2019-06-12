@@ -2,8 +2,10 @@ from datetime import datetime, timedelta
 from sortedcontainers import SortedList
 from time import sleep
 from threading import Thread
+from log import set_logging
 import clock
 import requests
+import logging
 
 
 class Scheduler:
@@ -12,6 +14,7 @@ class Scheduler:
     zero: timedelta = timedelta()
     fake_clock: clock.Clock = None
     recurrences: list = ["none", "minute", "hour", "day", "week", "month", "year"]
+    schedule_logger: logging.Logger = set_logging("schedule")
 
     def __init__(self, fake_clock: clock.Clock):
         self.fake_clock = fake_clock
@@ -49,14 +52,18 @@ class Scheduler:
                     thread.start()
             sleep(0.1)
 
-    def send(self, action: tuple, time : datetime) -> None:
-        print("Triggering action: [TIME_REQUIRED=" + str(action[0]) + "][TIME_CURRENT=" + str(time) + "][TARGET=" + str(action[1]) + "]")  # TODO Logger
+    def send(self, action: tuple, time: datetime) -> None:
+        self.schedule_logger.info(
+            "Triggering action: [TIME_REQUIRED=" + str(action[0]) + "][TIME_CURRENT=" + str(time) + "][TARGET=" + str(
+                action[1]) + "]")
         self.reschedule(action)
         try:
             requests.post(action[1], data=action[2])
         except Exception as e:
-            print(e) # TODO Logger
-
+            self.schedule_logger.info(
+                "Triggering action: [TIME_REQUIRED=" + str(action[0]) + "][TIME_CURRENT=" + str(
+                    time) + "][TARGET=" + str(
+                    action[1]) + "]" + "Failed ===>" + e)
 
     def reschedule(self, action: tuple) -> None:
         print(action)
