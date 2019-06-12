@@ -3,8 +3,8 @@
 import os
 import sys
 import requests
-from messageAsynchrone import send
-from messageAsynchrone import receive
+from async_message import send
+from async_message import receive
 
 
 def main():
