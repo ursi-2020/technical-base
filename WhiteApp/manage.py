@@ -2,6 +2,9 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+import requests
+from messageAsynchrone import send
+from messageAsynchrone import receive
 
 
 def main():
@@ -19,3 +22,13 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+    response = requests.get("http://localhost:5000/time")
+    if response:
+        print('Success!')
+        print(response.text)
+    else:
+        print('An error has occurred.')
+
+    send.send()
+    receive.receive()
