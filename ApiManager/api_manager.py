@@ -119,7 +119,7 @@ def get_id_from_service(service_name):
             id = route['id']
     return id
 
-
+# Don't forget to start kong service
 if __name__ == '__main__':
     register('http://mockbin.org', 'test-service3')
     add_route('test-service3', 'test-example.com')
