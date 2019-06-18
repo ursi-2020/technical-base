@@ -1,10 +1,12 @@
+import sys
+sys.path.insert(0,'../apimanager')
 from flask import Flask, request, abort, render_template, jsonify
 from scheduler import Scheduler
 from clock import Clock
 import signal
 import logging
 from log import set_logging
-#import api_manager as api
+import api_manager as api
 
 app = Flask(__name__)
 speed = 50.0
@@ -124,6 +126,6 @@ def get_info():
 
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, keyboard_interrupt_handler)
-    #api.unregister('scheduler')
-    #api.register('http://localhost:5000', 'scheduler')
+    api.unregister('scheduler')
+    api.register('http://localhost:5000', 'scheduler')
     app.run(host='localhost', port=5000)
