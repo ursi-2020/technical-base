@@ -4,7 +4,7 @@ from clock import Clock
 import signal
 import logging
 from log import set_logging
-import api_manager as api
+#import api_manager as api
 
 app = Flask(__name__)
 speed = 50.0
@@ -109,7 +109,7 @@ def switch_state_clock():
 def get_time():
     logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
     response = app.response_class(
-        response=str(clk.get_time().strftime(sch.time_format)),
+        response=str('"' + clk.get_time().strftime(sch.time_format) + '"'),
         status=200,
         mimetype='application/json'
     )
@@ -124,6 +124,6 @@ def get_info():
 
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, keyboard_interrupt_handler)
-    api.unregister('scheduler')
-    api.register('http://localhost:5000', 'scheduler')
+    #api.unregister('scheduler')
+    #api.register('http://localhost:5000', 'scheduler')
     app.run(host='localhost', port=5000)
