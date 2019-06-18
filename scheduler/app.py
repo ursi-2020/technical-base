@@ -2,14 +2,12 @@ from flask import Flask, request, abort, render_template, jsonify
 from scheduler import Scheduler
 from clock import Clock
 import signal
-import sys
 import logging
 from log import set_logging
+import api_manager as api
 
 app = Flask(__name__)
 speed = 50.0
-if len(sys.argv) > 1:
-    speed = sys.argv[1]
 clk: Clock = Clock(speed=speed)
 sch: Scheduler = Scheduler(clk)
 
@@ -110,7 +108,12 @@ def switch_state_clock():
 @app.route('/clock/time', methods=['GET', 'POST'])
 def get_time():
     logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
-    return str(clk.get_time().strftime(sch.time_format))
+    response = app.response_class(
+        response=str(clk.get_time().strftime(sch.time_format)),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
 
 
 @app.route('/clock/info', methods=['GET'])
@@ -121,4 +124,6 @@ def get_info():
 
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, keyboard_interrupt_handler)
+    api.unregister('scheduler')
+    api.register('http://localhost:5000', 'scheduler')
     app.run(host='localhost', port=5000)
