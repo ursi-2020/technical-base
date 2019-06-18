@@ -5,19 +5,22 @@ api_manager_url = 'http://localhost:8001/'
 api_services_url = 'http://localhost:8000/'
 
 
+# Add a default route named same as the service name
 def register(url, service_name):
     print(" [x] Trying to register the service name %r with the url %r" % (service_name, url))
     try:
         payload = {'name': service_name, 'url': url}
         r = requests.post(api_manager_url + 'services/', data=payload)
+        add_route(service_name, service_name)
     except requests.exceptions.RequestException as err:
         print(err)
     print(" [x] Successfully registered the service name %r with the url %r" % (service_name, url))
 
 
-def delete_service(service_name):
+def unregister(service_name):
     print(" [x] Trying to delete the service name %r" % service_name)
     try:
+        delete_route(service_name)
         r = requests.delete(api_manager_url + 'services/' + service_name)
         if r.status_code == 400:
             print(r.text)
@@ -83,6 +86,15 @@ def get_service(host):
     print(r.text)
 
 
+def get_request(host, url):
+    print(" [x] Trying to send Get request to host %r " % host)
+    headers = {'Host': host}
+    r = requests.get(api_services_url + url, headers=headers)
+    print(r.status_code)
+    print(r.text)
+    return r.text
+
+
 def get_all_routes():
     r = requests.get(api_manager_url + 'routes/')
     routes = json.loads(r.text)
@@ -119,12 +131,38 @@ def get_id_from_service(service_name):
             id = route['id']
     return id
 
+
+def add_auth_key_plugin(service_name):
+    print(" [x] Trying to add auth-key plugin to service %r" % service_name)
+    try:
+        payload = {'name': 'key-auth'}
+        r = requests.post(api_manager_url + 'services/' + service_name + '/plugins/', data=payload)
+        if r.status_code == 404:
+            print(" [x] Service name %r not found" % service_name)
+            return
+    except requests.exceptions.RequestException as err:
+        print(err)
+    print(" [x] Successfully added auth-key to the service name %r" % service_name)
+
+
+def add_consumer(consumer_name):
+    print(" [x] Trying to add consumer %r" % consumer_name)
+    try:
+        payload = {'username': consumer_name}
+        r = requests.post(api_manager_url + 'consumers/', data=payload)
+    except requests.exceptions.RequestException as err:
+        print(err)
+    print(" [x] Successfully added auth-key to the service name %r" % consumer_name)
+
+
 # Don't forget to start kong service
-if __name__ == '__main__':
-    register('http://mockbin.org', 'test-service3')
-    add_route('test-service3', 'test-example.com')
-    delete_route('test-example.com')
-    delete_service('test-service3')
+#if __name__ == '__main__':
+    # register('http://mockbin.org', 'test-service3')
+    # add_route('test-service3', 'test-example.com')
+    # add_auth_key_plugin('test-service3')
     # delete_service_with_route("test-example.com")
     # get_service('test-example.com')
     # get_all_routes()
+    # delete_route('test-example.com')
+    # delete_service('test-service3')
+
