@@ -1,8 +1,7 @@
 #!/bin/bash
 
 set -e
-mountedDirectory="/mnt/technical_base"
-venvDirectory="/home/socle-technique/python_venv"
+source /usr/local/bin/tc_variables.sh
 appName=
 
 if [[ ! -d "$mountedDirectory" ]]
@@ -30,7 +29,7 @@ echo "Le dossier de l'application a été créé au chemin suivant: ${appdir}"
 virtualenv "${venvDirectory}/${appName}_venv"
 echo "Le python virtual env de l'application a été créé au chemin suivant: ${venvDirectory}/${appName}_venv"
 
-dbpasswd=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13)
+dbpasswd=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 7)
 
 sudo -u postgres psql -c "CREATE USER $appName WITH PASSWORD '$dbpasswd';";
 sudo -u postgres psql -c "CREATE DATABASE ${appName}_db;"
@@ -59,5 +58,12 @@ ssh-agent bash -c "ssh-add ${keyfile}; git clone git@github.com:ursi-2020/exampl
 rsync -r --exclude '.git*' ${clonedir} ${appdir}
 echo "Un code example d'application a été copié dans le dossier de l'application (${appdir})"
 
+envFile="${appdir}/logins.env"
+echo "DJANGO_DB_USER=${appName}" > ${envFile}
+echo "DJANGO_DB_NAME=${appName}_db" >> ${envFile}
+echo "DJANGO_DB_PASSWORD=${dbpasswd}" >> ${envFile}
+echo "DJANGO_APP_NAME=${appName}" >> ${envFile}
+
+echo ${appName} >> ${appListFile}
 echo "Le script est terminé"
 exit 0
