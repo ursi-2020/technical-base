@@ -16,7 +16,7 @@ do
     "que des caractères alphanumériques"
     read appName
 
-    if [[ ! -z "$appName" ]] && [[ -e "${mountedDirectory}/${appName}" ]]
+    if ([[ ! -z "$appName" ]] && grep -Fxq "$appName" "$appListFile") || [[ "$appName" == "scheduler" ]] || [[ "$appName" == "postgres" ]]
     then
         appName=
         echo "L'application ${appName} existe déjà"
@@ -58,11 +58,12 @@ ssh-agent bash -c "ssh-add ${keyfile}; git clone git@github.com:ursi-2020/exampl
 rsync -r --exclude '.git*' ${clonedir} ${appdir}
 echo "Un code example d'application a été copié dans le dossier de l'application (${appdir})"
 
-envFile="${appdir}/logins.env"
+envFile="${appdir}/variables.env"
 echo "DJANGO_DB_USER=${appName}" > ${envFile}
 echo "DJANGO_DB_NAME=${appName}_db" >> ${envFile}
 echo "DJANGO_DB_PASSWORD=${dbpasswd}" >> ${envFile}
 echo "DJANGO_APP_NAME=${appName}" >> ${envFile}
+echo "WEBSERVER_PORT=8100" >> ${envFile}
 
 echo ${appName} >> ${appListFile}
 echo "Le script est terminé"
