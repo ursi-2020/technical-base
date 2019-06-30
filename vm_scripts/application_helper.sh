@@ -17,8 +17,8 @@ usage(){
 
 while getopts "har" option; do
     case "$option" in
-        a) sudo -u socle-technique /usr/local/bin/add_application.sh ;;
-        r) sudo -u socle-technique /usr/local/bin/remove_application.sh ;;
+        a) sudo -u socle-technique /usr/local/bin/add_application.sh ${USER} ;;
+        r) sudo -u socle-technique /usr/local/bin/remove_application.sh ${USER} ;;
         :) error ;;
         h) usage ;;
         *) error ;;

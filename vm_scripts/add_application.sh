@@ -10,10 +10,10 @@ then
     exit 1
 fi
 
-while [[ -z "$appName" ]] || [[ $(echo -n "$appName" | wc -m) -gt 30 ]] || [[ ! "$appName" =~ ^[a-zA-Z0-9_]+$ ]]
+while [[ -z "$appName" ]] || [[ $(echo -n "$appName" | wc -m) -gt 30 ]] || [[ ! "$appName" =~ ^[a-z0-9_]+$ ]]
 do
     echo "Quel est le nom de la nouvelle application ? Le nom ne doit pas dépasser 30 caractères et ne comporter" \
-    "que des caractères alphanumériques"
+    "que des caractères alphanumériques en minuscule"
     read appName
 
     if ([[ ! -z "$appName" ]] && grep -Fxq "$appName" "$appListFile") || [[ "$appName" == "scheduler" ]] || [[ "$appName" == "postgres" ]]
@@ -27,6 +27,7 @@ appdir="${mountedDirectory}/${appName}"
 mkdir ${appdir}
 echo "Le dossier de l'application a été créé au chemin suivant: ${appdir}"
 virtualenv "${venvDirectory}/${appName}_venv"
+setfacl -Rm "u:${1}:rwx" "${venvDirectory}/${appName}_venv"
 echo "Le python virtual env de l'application a été créé au chemin suivant: ${venvDirectory}/${appName}_venv"
 
 dbpasswd=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 7)

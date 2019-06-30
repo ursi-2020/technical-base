@@ -37,13 +37,13 @@ done
 appdir="${mountedDirectory}/${appName}"
 if [[ -d "$appdir" ]]
 then
-    rm -rf ${appdir}
+    sudo rm -rf ${appdir}
 fi
 
 venvdir="${venvDirectory}/${appName}_venv"
 if [[ -d "$venvdir" ]]
 then
-    rm -rf ${venvdir}
+    sudo rm -rf ${venvdir}
 fi
 
 sudo -u postgres psql -c "DROP DATABASE IF EXISTS ${appName}_db;"
