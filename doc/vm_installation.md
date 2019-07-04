@@ -28,3 +28,26 @@ The shared folder is located at the following path:
 ```
 /mnt/technical_base/
 ```
+## Basic error
+
+### Windows :
+
+If you can not launch the vm with virtual Box and you got (check the error cod you got on google):
+```
+Windows 10 Tech Preview
+```
+use this link and follow the tutorial :
+```
+https://appuals.com/fix-hypervisor-is-not-running-error-on-windows-10/
+```
+
+If you got this error :
+```
+Error 0x80070057
+```
+
+follow this tutorial :
+```
+https://appuals.com/windows-update-error-0x80070057-fix/
+```
+The method 2 works well.
