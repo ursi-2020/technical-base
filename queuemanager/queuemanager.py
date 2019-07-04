@@ -1,39 +1,43 @@
+import json
 import pika
+import os
 
 url_queue_host = 'localhost'
+callback_dict = {}
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=url_queue_host))
+channel = connection.channel()
 
+def test(appfrom, appto, datetime, action, message):
+    print(message)
 
 def callback(ch, method, properties, body):
-    print(" [x] Received %r" % body)
+    body_json = json.load(body)
+    for c in callback_dict[(body_json['from'], body_json['action'])]:
+        c(body_json['from'], body_json['to'], body_json['datetime'], body_json['action'], body_json['message'])
 
 
-def receive(queue_name):
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host=url_queue_host))
-    channel = connection.channel()
+def receive(queue_name, action, callback):
 
-    channel.queue_declare(queue=queue_name)
-
-    channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
-
+    callback_dict[(queue_name, action)].append(callback)
     print(' [*] Waiting for messages. To exit press CTRL+C')
-    channel.start_consuming()
 
 
-def send(queue_tosend, message):
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host=url_queue_host))
-    channel = connection.channel()
-
+def send(queue_tosend, appfrom, appto, action, message):
+    datetime = "05-12-19-20001201"
     channel.queue_declare(queue=queue_tosend)
-
-    channel.basic_publish(exchange='', routing_key=queue_tosend, body=message)
+    body = '{ "from":"' + appfrom +\
+           '", "to":"' + appto +\
+           '", "datetime":' + datetime +\
+           '", "action":"' + action +\
+           '", "message":"' + message + '"}'
+    channel.basic_publish(exchange='', routing_key=queue_tosend, body=body)
     print(" [x] Sent message to queue name %r" % queue_tosend)
     connection.close()
 
 
 if __name__ == '__main__':
-   message = '{ "from":"caisse", "to":"caisse", "datetime": "05-12-19-20001201", "body": "Hello word"}'
-   message2 = '{ "from":"caisse", "to":"crm", "datetime": "05-12-19-20001201", "body": "Hello word 2"}'
-   send('caisse', message)
-   send('crm', message2)
-   receive('caisse')
-   receive('crm')
+    send('caisse', "caisse", "crm", "print", "toto")
+    receive('caisse', 'print', test)
+
+    channel.basic_consume(queue='caisse', on_message_callback=callback, auto_ack=True)
+    channel.start_consuming()
