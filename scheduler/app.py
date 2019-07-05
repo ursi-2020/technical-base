@@ -1,5 +1,7 @@
 import sys
-sys.path.insert(0,'../apimanager')
+sys.path.insert(0,'../apimanager/apipkg')
+import api_manager as api
+
 from flask import Flask, request, abort, render_template, jsonify
 from scheduler import Scheduler
 from clock import Clock
