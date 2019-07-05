@@ -1,3 +1,5 @@
+[home](index.md)
+
 # Scheduler
 
 ## Functions:
