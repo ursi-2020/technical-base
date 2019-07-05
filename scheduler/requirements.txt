@@ -1,4 +1,5 @@
 requests
 sortedcontainers
 flask
+json
 git+git://github.com/ursi-2020/technical-base-package.git@master#egg=apipkg
