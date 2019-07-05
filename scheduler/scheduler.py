@@ -40,6 +40,9 @@ class Scheduler:
 
         self.schedule_list.add((scheduled_datetime, url, recurrence, data))
 
+        self.schedule_logger.info(
+            "Scheduling action: [TIME_REQUIRED=" + str(scheduled_datetime) + "][TIME_CURRENT=" + str(self.fake_clock.get_time()) + "][TARGET=" + str(
+                url) + "]")
         return True
 
     def trigger(self) -> None:

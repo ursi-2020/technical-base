@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module app</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>app</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/mnt/c/Users/Maxime/Desktop/URSI/technical-base/scheduler/app.py">/mnt/c/Users/Maxime/Desktop/URSI/technical-base/scheduler/app.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="api_manager.html">api_manager</a><br>
+<a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="logging.html">logging</a><br>
+<a href="signal.html">signal</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-dashboard"><strong>dashboard</strong></a>()</dt><dd><tt>Route:&nbsp;'/',&nbsp;methods=['GET',&nbsp;'POST']<br>
+:return:&nbsp;the&nbsp;dashboard&nbsp;of&nbsp;the&nbsp;scheduler&nbsp;app</tt></dd></dl>
+ <dl><dt><a name="-get_info"><strong>get_info</strong></a>()</dt><dd><tt>Route:&nbsp;'/clock/info',&nbsp;methods=['GET',&nbsp;'POST']<br>
+Send&nbsp;all&nbsp;the&nbsp;information&nbsp;about&nbsp;the&nbsp;clock:&nbsp;current&nbsp;time,&nbsp;clock&nbsp;speed&nbsp;and&nbsp;clock&nbsp;state&nbsp;(paused/&nbsp;running)<br>
+:return:&nbsp;a&nbsp;json&nbsp;body&nbsp;with&nbsp;the&nbsp;information</tt></dd></dl>
+ <dl><dt><a name="-get_schedule_list"><strong>get_schedule_list</strong></a>()</dt><dd><tt>Route:&nbsp;'/schedule/list',&nbsp;methods=['GET']<br>
+:return:&nbsp;returns&nbsp;an&nbsp;html&nbsp;table&nbsp;with&nbsp;all&nbsp;schedules&nbsp;tasks,&nbsp;as&nbsp;seen&nbsp;in&nbsp;the&nbsp;dashboard</tt></dd></dl>
+ <dl><dt><a name="-get_schedule_size"><strong>get_schedule_size</strong></a>()</dt><dd><tt>Route:&nbsp;'/schedule/size',&nbsp;methods=['GET']<br>
+:return:&nbsp;returns&nbsp;the&nbsp;number&nbsp;of&nbsp;scheduled&nbsp;future&nbsp;tasks</tt></dd></dl>
+ <dl><dt><a name="-get_set_speed"><strong>get_set_speed</strong></a>()</dt><dd><tt>Route:&nbsp;'/clock/speed',&nbsp;methods=['GET',&nbsp;'POST']<br>
+If&nbsp;method&nbsp;is&nbsp;POST,&nbsp;will&nbsp;look&nbsp;for&nbsp;the&nbsp;'new'&nbsp;param&nbsp;to&nbsp;set&nbsp;the&nbsp;new&nbsp;clock&nbsp;speed.<br>
+Example:&nbsp;/clock/speed?new=100<br>
+:return:&nbsp;the&nbsp;clock&nbsp;speed,&nbsp;the&nbsp;new&nbsp;clock&nbsp;speed&nbsp;if&nbsp;it&nbsp;was&nbsp;updated</tt></dd></dl>
+ <dl><dt><a name="-get_time"><strong>get_time</strong></a>()</dt><dd><tt>Route:&nbsp;'/clock/time',&nbsp;methods=['GET',&nbsp;'POST']<br>
+Get&nbsp;the&nbsp;current&nbsp;time&nbsp;from&nbsp;the&nbsp;clock.<br>
+:return:&nbsp;a&nbsp;json&nbsp;body&nbsp;with&nbsp;the&nbsp;current&nbsp;time.</tt></dd></dl>
+ <dl><dt><a name="-keyboard_interrupt_handler"><strong>keyboard_interrupt_handler</strong></a>(sgn, frame)</dt></dl>
+ <dl><dt><a name="-pause_clock"><strong>pause_clock</strong></a>()</dt><dd><tt>Route:&nbsp;'/clock/pause',&nbsp;methods=['POST']<br>
+Pause&nbsp;the&nbsp;clock<br>
+:return:&nbsp;'success'&nbsp;on&nbsp;success&nbsp;or&nbsp;status&nbsp;422&nbsp;if&nbsp;clock&nbsp;was&nbsp;already&nbsp;paused.</tt></dd></dl>
+ <dl><dt><a name="-resume_clock"><strong>resume_clock</strong></a>()</dt><dd><tt>Route:&nbsp;'/clock/resume',&nbsp;methods=['POST']<br>
+Resume&nbsp;the&nbsp;clock<br>
+:return:&nbsp;'success'&nbsp;on&nbsp;success&nbsp;or&nbsp;status&nbsp;422&nbsp;if&nbsp;clock&nbsp;was&nbsp;already&nbsp;running.</tt></dd></dl>
+ <dl><dt><a name="-schedule_message"><strong>schedule_message</strong></a>()</dt><dd><tt>Route:&nbsp;'/schedule/add',&nbsp;methods=["POST"]<br>
+Add&nbsp;a&nbsp;task&nbsp;to&nbsp;schedule<br>
+Requires&nbsp;a&nbsp;json&nbsp;body:&nbsp;{"target_url"="",&nbsp;"target_app"="",&nbsp;"time"="",&nbsp;"recurrence"="",&nbsp;"data"=""}<br>
+:return:&nbsp;'Task&nbsp;has&nbsp;been&nbsp;scheduled'&nbsp;if&nbsp;all&nbsp;went&nbsp;well,&nbsp;else&nbsp;sends&nbsp;a&nbsp;status&nbsp;422</tt></dd></dl>
+ <dl><dt><a name="-switch_state_clock"><strong>switch_state_clock</strong></a>()</dt><dd><tt>Route:&nbsp;'/clock/switch',&nbsp;methods=['POST']<br>
+Switch&nbsp;between&nbsp;the&nbsp;running&nbsp;and&nbsp;paused&nbsp;state&nbsp;of&nbsp;the&nbsp;clock.<br>
+:return:&nbsp;'success'</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>__annotations__</strong> = {'clk': &lt;class 'clock.Clock'&gt;, 'logger': &lt;class 'logging.Logger'&gt;, 'sch': &lt;class 'scheduler.Scheduler'&gt;}<br>
+<strong>app</strong> = &lt;Flask 'app'&gt;<br>
+<strong>clk</strong> = &lt;clock.Clock object&gt;<br>
+<strong>logger</strong> = &lt;Logger debug (DEBUG)&gt;<br>
+<strong>request</strong> = &lt;LocalProxy unbound&gt;<br>
+<strong>sch</strong> = &lt;scheduler.Scheduler object&gt;<br>
+<strong>speed</strong> = 50.0</td></tr></table>
+</body></html>

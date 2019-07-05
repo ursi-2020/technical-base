@@ -7,6 +7,7 @@ import signal
 import logging
 from log import set_logging
 import api_manager as api
+import json
 
 app = Flask(__name__)
 speed = 50.0
@@ -37,32 +38,54 @@ ROUTES
 
 @app.route('/', methods=['GET', 'POST'])
 def dashboard():
+    """
+    Route: '/', methods=['GET', 'POST']
+    :return: the dashboard of the scheduler app
+    """
     logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
     return render_template("index.html", speed=clk.speed, paused=clk.paused)
 
 
 @app.route('/schedule/size', methods=['GET'])
 def get_schedule_size():
+    """
+    Route: '/schedule/size', methods=['GET']
+    :return: returns the number of scheduled future tasks
+    """
     logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
     return str(len(sch.schedule_list))
 
 
 @app.route('/schedule/list', methods=['GET'])
 def get_schedule_list():
+    """
+    Route: '/schedule/list', methods=['GET']
+    :return: returns an html table with all schedules tasks, as seen in the dashboard
+    """
     logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
     return render_template("schedule_table.html", scheduled_list=sch.schedule_list)
 
 
 @app.route('/schedule/add', methods=["POST"])
 def schedule_message():
+    """
+    Route: '/schedule/add', methods=["POST"]
+    Add a task to schedule
+    Requires a json body: {"target_url"="", "target_app"="", "time"="", "recurrence"="", "data"=""}
+    :return: 'Task has been scheduled' if all went well, else sends a status 422
+    """
     logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
-    if 'target_url' not in request.args.keys():
+    parameters = request.get_json(force=True, silent=True)
+    if parameters is None:
+        logger.warning("Invalid HTTP request [Method = " + request.method + ", URL = " + request.url + "] data is empty.")
+        abort(422)
+    if 'target_url' not in parameters.keys():
         logger.warning("Invalid HTTP request [Method = " + request.method + ", URL = " + request.url + "] targe_url field not found.")
         abort(422)
-    if 'time' not in request.args.keys():
+    if 'time' not in parameters.keys():
         logger.warning("Invalid HTTP request [Method = " + request.method + ", URL = " + request.url + "] time field not found.")
         abort(422)
-    result = sch.schedule(request.args.get('target_url'), request.args.get('time'), request.args.get('recurrence'), request.get_data(as_text=True))
+    result = sch.schedule(parameters.get('target_url'), parameters.get('time'), parameters.get('recurrence'), parameters.get('data'))
     if not result:
         logger.warning("Invalid HTTP request [Method = " + request.method + ", URL = " + request.url + "] Invalid fields.")
         abort(422)
@@ -71,7 +94,12 @@ def schedule_message():
 
 @app.route('/clock/speed', methods=['GET', 'POST'])
 def get_set_speed():
-    print(request)
+    """
+    Route: '/clock/speed', methods=['GET', 'POST']
+    If method is POST, will look for the 'new' param to set the new clock speed.
+    Example: /clock/speed?new=100
+    :return: the clock speed, the new clock speed if it was updated
+    """
     logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
     if request.method == 'GET' or not 'new' in request.args.keys():
         return str(clk.speed)
@@ -83,6 +111,11 @@ def get_set_speed():
 
 @app.route('/clock/pause', methods=['POST'])
 def pause_clock():
+    """
+    Route: '/clock/pause', methods=['POST']
+    Pause the clock
+    :return: 'success' on success or status 422 if clock was already paused.
+    """
     logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
     if not clk.pause():
         logger.warning("Invalid HTTP request [Method = " + request.method + ", URL = " + request.url + "] Clock is not running.")
@@ -92,6 +125,11 @@ def pause_clock():
 
 @app.route('/clock/resume', methods=['POST'])
 def resume_clock():
+    """
+    Route: '/clock/resume', methods=['POST']
+    Resume the clock
+    :return: 'success' on success or status 422 if clock was already running.
+    """
     logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
     if not clk.resume():
         logger.warning("Invalid HTTP request [Method = " + request.method + ", URL = " + request.url + "] Clock is not paused.")
@@ -101,6 +139,11 @@ def resume_clock():
 
 @app.route('/clock/switch', methods=['POST'])
 def switch_state_clock():
+    """
+    Route: '/clock/switch', methods=['POST']
+    Switch between the running and paused state of the clock.
+    :return: 'success'
+    """
     logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
     if not clk.resume():
         clk.pause()
@@ -109,6 +152,11 @@ def switch_state_clock():
 
 @app.route('/clock/time', methods=['GET', 'POST'])
 def get_time():
+    """
+    Route: '/clock/time', methods=['GET', 'POST']
+    Get the current time from the clock.
+    :return: a json body with the current time.
+    """
     logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
     response = app.response_class(
         response=str('"' + clk.get_time().strftime(sch.time_format) + '"'),
@@ -120,6 +168,11 @@ def get_time():
 
 @app.route('/clock/info', methods=['GET'])
 def get_info():
+    """
+    Route: '/clock/info', methods=['GET', 'POST']
+    Send all the information about the clock: current time, clock speed and clock state (paused/ running)
+    :return: a json body with the information
+    """
     logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
     return jsonify((str(clk.get_time().strftime(sch.time_format)), str(clk.speed), str(clk.paused)))
 
