@@ -1,4 +1,4 @@
-[home](index.md)
+[home](../index.md)
 
 ## Wrappers pour l'utilisation de l'apimanager
 
