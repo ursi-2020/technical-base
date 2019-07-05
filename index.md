@@ -8,4 +8,6 @@ Ici vous avez la liste des pages de documentation du meilleur projet de l'année
 
 [Application](/doc/environnement_setup.md)
 
+[API Manager](/doc/apimanager.md)
+
 [Scheduler](/doc/environnement_setup.md)
