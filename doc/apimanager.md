@@ -1,4 +1,4 @@
-[home](/doc/environnement_setup.md)
+[home](/index.md)
 
 ## Wrappers pour l'utilisation de l'apimanager
 
