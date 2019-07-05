@@ -1,4 +1,4 @@
-[home](index.md)
+[home](../index.md)
 
 # VM installation:
 
