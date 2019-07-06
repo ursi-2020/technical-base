@@ -49,3 +49,5 @@ Dans l'exemple précédent une application peut demander le temps à l'applicati
 
 D'autre fonction on été développé mais qui pour l'instant vous semble pas utile, vous pouvez regarder les autres fonctions développer sur le repo suivant : 
 https://github.com/ursi-2020/technical-base-package/blob/master/apipkg/api_manager.py
+
+Pour plus d'information sur le fonctionnement de [Kong](https://docs.konghq.com/0.4.x/getting-started/introduction/)
