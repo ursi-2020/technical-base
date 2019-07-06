@@ -2,18 +2,17 @@
 
 # First step
 
-Pour vos premier pas sur ce projet vous devrait simuler une communication entre deux applications ou plus.
+Pour vos premiers pas sur ce projet vous devrez simuler une communication entre deux applications ou plus.
 Pour cela nous allons utiliser l'API MANAGER Kong et les wrappers développés par le Socle-Technique.
-* Se sera à vous de vous arranger entre application sur le format des données que vous voulez envoyer et recevoir.
-* Le mieux serai d'utiliser le format json et de vous mettre daccord sur les attributs des messages par exemple : { 'id':'1', 'app-name', 'caisse', ... }
-* Ce sera aussi à vous de définir l'architecture de votre application, coder sur quel fichier etc... vous pouvez suivre le tutorial Django 
+* Vous devrez vous arranger entre les différentes applications sur le format des données que vous voulez envoyer et recevoir.
+* Dans l'idéal, vous pourriez utiliser le format json et de vous mettre d'accord sur les attributs des messages, comme par exemple : { 'id':'1', 'app-name', 'caisse', ... }
+* Vous devrez définir l'architecture de votre application, créer les fichiers dont vous aurez besoin pour votre développement etc... vous pouvez suivre le tutoriel Django 
 
 Prenons deux applications : A et B
 
 Il vous faut deux fonctions :
 
-
-Le première sera la fonction qui permettra d'envoyer les informations de l'application A , par exemple le nom de l'application:
+Le première sera la fonction qui permettra d'envoyer les informations de l'application A, par exemple le nom de l'application:
 	
 	def info(request):
 		return A-name
@@ -26,8 +25,8 @@ dans le fichier urls.py
 		path('info', views.info, name='info'),
 	]
 
-Maintenant nous allons appeler la fonction précédemment créer au travers de la route défini 'info'.
-Dans l'application example l'architecture des urls est la suivante :
+Maintenant nous allons appeler la fonction précédemment créée grâce à la route nommée 'info'.
+Dans l'application blanche, l'architecture des urls est la suivante :
 
 core.urls.py :
 
@@ -43,7 +42,7 @@ myapp.urls.py :
 	  path('info', views.info, name='info'),  
 	]
 
-Donc la route à appeler dans l'application B et la suivante :
+Donc la route à appeler dans l'application B est la suivante :
 
 	'my-app/info'
 
