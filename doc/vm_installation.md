@@ -7,8 +7,6 @@
 - Launch VirtualBox.
 - Import a new VM.
 
-### Change technical-base to your project name!
-
 
 ![newVM](./images/newVM.png)
 - Select the downloaded file.
@@ -18,6 +16,7 @@
 - "Configuration > Shared Folder".
 ![config](./images/configuration.png)
 ![sharedFolder](./images/shared_folder.png)
+### Change technical-base to the name of your GIT repository of your APP!
 - Edit the shared folder so that it points to the previously cloned local git repository.
 ![link](./images/link.png)
 - Right click on the machine > start > start without display.
