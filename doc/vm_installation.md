@@ -6,6 +6,10 @@
 - Download the [image](https://drive.google.com/file/d/1m7IjvIiYe3n18jPupgxcfHy7d2l2Swg7/view?usp=sharing) of the VM.
 - Launch VirtualBox.
 - Import a new VM.
+
+### Change technical-base to your project name!
+
+
 ![newVM](./images/newVM.png)
 - Select the downloaded file.
 ![dlfile](./images/select_dl_file.png)
