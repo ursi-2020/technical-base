@@ -2,11 +2,13 @@
 
 Ici vous avez la liste des pages de documentation du meilleur projet de l'année :
 
-[Setup de l'environnement](/doc/environnement_setup.md)
+[Environment Setup](/doc/environnement_setup.md)
 
-[Installation de la VM](/doc/vm_installation.md)
+[VM Setup](/doc/vm_installation.md)
 
-[Application](/doc/application.md)
+[Create an Application](/doc/application.md)
+
+[Launch and debug your Application](/doc/start_and_debug_app.md)
 
 [API Manager](/doc/apimanager.md)
 

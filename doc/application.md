@@ -1,6 +1,6 @@
 [home](../index.md)
 
-# Application
+# Create an Application
 
 ## Creating a new application:
 
@@ -19,5 +19,5 @@ application_helper -a
 - Do not forgot id of the created database that will be displayed by the script:
 ![app](./images/add_app.png)
 
-- The code of the application exemple has been cloned in your shared folder and is therefore accessible (from your host machine and therefore from your favorite IDE).
+- The code of the application example has been cloned in your shared folder and is therefore accessible (from your host machine and therefore from your favorite IDE).
 - You can git push this white application on your repository.
