@@ -1,6 +1,6 @@
 # Documentation URSI
 
-Ici vous avez la liste des pages de documentation du meilleur projet de l'année :
+Here is the list of tutorials to make a good start in your project :
 
 [Environment Setup](/doc/environnement_setup.md)
 
