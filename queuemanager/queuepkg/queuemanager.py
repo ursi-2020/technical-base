@@ -30,10 +30,11 @@ def send(queue_tosend, message):
     connection.close()
 
 
-if __name__ == '__main__':
-   message = '{ "from":"caisse", "to":"caisse", "datetime": "05-12-19-20001201", "body": "Hello word"}'
-   message2 = '{ "from":"caisse", "to":"crm", "datetime": "05-12-19-20001201", "body": "Hello word 2"}'
-   send('caisse', message)
-   send('crm', message2)
-   receive('caisse')
-   receive('crm')
+#if __name__ == '__main__':
+ #  message = '{ "from":"caisse", "to":"caisse", "datetime": "05-12-19-20001201", "body": "Hello word"}'
+ # message2 = '{ "from":"caisse", "to":"crm", "datetime": "05-12-19-20001201", "body": "Hello word 2"}'
+ #  send('caisse', message)
+ #  send('crm', message2)
+ #  receive('caisse')
+ # receive('crm')
+#
