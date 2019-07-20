@@ -30,7 +30,7 @@ do
 done
 
 appName2=$(echo ${appName} | tr '-' '_')
-git_adress=$(grep '^crm,' ${gitListFile} | cut -d, -f2)
+git_adress=$(grep "^${appName}," ${gitListFile} | cut -d, -f2)
 appdir="${mountedDirectory}/${appName}"
 mkdir -p ${appdir}
 clonedir="/tmp/pulled-app/"
