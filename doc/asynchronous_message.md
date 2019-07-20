@@ -54,11 +54,14 @@ In the application B you will send an asynchronous message to the application A:
 Go to the file `views.py`, in the function "index(request)" create a Json message that should have all theses parameters:
 
 **from** : from which the message is sent, you can use the variable *os.environ['DJANGO_APP_NAME']* (dont forget to import os), os.environ will get the variable stored in the fields `variables.env`
+
 **to** : to which app the message is sent
+
 **datetime** : date on which the request is sent, the date time will be set by get the time from the Scheduler app using the function 
 
 	time = api.send_request('scheduler', 'clock/time')
 	
+
 **body** : a Json message that will contain particular fields that each apps need, you will need to use a standard, for this example we just put a simple String
 
 	message = '{ "from":"' + os.environ['DJANGO_APP_NAME'] + '", "to":"AppA", "datetime": ' + time + ', "body": "Hello word"}'
