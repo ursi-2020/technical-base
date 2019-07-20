@@ -46,6 +46,8 @@ These variables correspond to the following :
 - DJANGO_APP_NAME : The name of the application, it is also the name by which the application will be registered in the API manager.
 - WEBSERVER_PORT : The port on which the application's django server will run. Note that if you want to run multiple applications (to check communications between them for example), you have to set a different port for each application.
 
+Do not push this file to your git ! Each member of your team has his own database with its own credentials.
+
 ## Debug your application
 The problem is that your application is not running the same machine as your IDE. Don't worry (be happy), there is a solution : configuring a remote python interpreter. 
 
@@ -63,7 +65,7 @@ Here is how :
 - On the same window, make sure to uncheck "Automatically upload project files to the server", indeed our source files are in a shared folder.
 - Then edit the path binding by clicking on the folder icon inside the "Sync folder field"
 - Set the "Local Path" to the location of your application folder on your host machine, it should be already specified. 
-  The "Remote Path" has this form : ```/home/socle-technique/APP_FOLDER_NAME```
+  The "Remote Path" has this form : ```/home/technical_base/APP_FOLDER_NAME```
 ![newVM](./images/interpreter_4.png)
 - Click "OK", then again "Finish", you should have your remote python interpreter setup, you can close the window if this is the case.
 ![newVM](./images/interpreter_5.png)
