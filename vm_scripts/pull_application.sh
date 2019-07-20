@@ -10,13 +10,19 @@ then
     exit 1
 fi
 
-while [[ -z "$appName" ]] || [[ $(echo -n "$appName" | wc -m) -gt 30 ]] || [[ ! "$appName" =~ ^[a-z0-9_-]+$ ]]
+while [[ -z "$appName" ]]
 do
-    echo "Quel est le nom de la nouvelle application ? Le nom ne doit pas dépasser 30 caractères et ne comporter" \
-    "que des caractères alphanumériques en minuscule"
+    echo "Quel est le nom de l'application à pull ?"
+    echo $(cat "$gitListFile" | cut -d, -f1 | tr '\n' ' ')
     read appName
 
-    if ([[ ! -z "$appName" ]] && grep -Fxq "$appName" "$appListFile") || [[ "$appName" == "scheduler" ]] || [[ "$appName" == "postgres" ]] || [[ -d "${mountedDirectory}/${appName}" ]]
+    if [[ ! -z "$appName" ]] &&  ! cat "$gitListFile" | cut -d, -f1 | grep -Fxq "$appName"
+    then
+        appName=
+        echo "L'application ${appName} n'existe pas"
+    fi
+
+    if ([[ ! -z "$appName" ]] && grep -Fxq "$appName" "$appListFile") || [[ "$appName" == "scheduler" ]] || [[ "$appName" == "postgres" ]]
     then
         appName=
         echo "L'application ${appName} existe déjà"
@@ -24,9 +30,16 @@ do
 done
 
 appName2=$(echo ${appName} | tr '-' '_')
+git_adress=$(grep '^crm,' ${gitListFile} | cut -d, -f2)
 appdir="${mountedDirectory}/${appName}"
-mkdir ${appdir}
-echo "Le dossier de l'application a été créé au chemin suivant: ${appdir}"
+mkdir -p ${appdir}
+clonedir="/tmp/pulled-app/"
+
+if [[ -d "${venvDirectory}/${appName}_venv" ]]
+then
+    sudo rm -rf "${venvDirectory}/${appName}_venv"
+fi
+
 virtualenv "${venvDirectory}/${appName}_venv"
 setfacl -Rm "u:${1}:rwx" "${venvDirectory}/${appName}_venv"
 echo "Le python virtual env de l'application a été créé au chemin suivant: ${venvDirectory}/${appName}_venv"
@@ -42,8 +55,6 @@ echo "Nom de la base de données: ${appName2}_db"
 echo "Utilisateur propriétaire de la base de données: ${appName2}"
 echo "Mot de passe de l'utilisateur: ${dbpasswd}"
 
-clonedir="/tmp/example-app/"
-
 if [[ -d ${clonedir} ]]
 then
     rm -rf ${clonedir}
@@ -52,13 +63,12 @@ fi
 keyfile="/home/socle-technique/.ssh/github"
 if [[ ! -f ${keyfile} ]]
 then
-    echo "Impossible de trouver la clé ssh pour cloner l'appli blanche, le script va se stopper"
+    echo "Impossible de trouver la clé ssh pour cloner l'application "${appName}", le script va se stopper"
     exit 1
 fi
-
-ssh-agent bash -c "ssh-add ${keyfile}; git clone git@github.com:ursi-2020/example-app.git ${clonedir}"
-rsync -r --exclude '.git*' ${clonedir} ${appdir}
-echo "Un code example d'application a été copié dans le dossier de l'application (${appdir})"
+ssh-agent bash -c "ssh-add ${keyfile}; git clone ${git_adress} ${clonedir}"
+rsync -r ${clonedir} ${appdir}
+echo "Le dossier de l'application a été téléchargé au chemin suivant : ${appdir}"
 
 envFile="${appdir}/variables.env"
 echo "DJANGO_DB_USER=${appName2}" > ${envFile}

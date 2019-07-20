@@ -1,0 +1,10 @@
+gestion-magasin,git@github.com:ursi-2020/gestion-magasin.git
+business-intelligence,git@github.com:ursi-2020/business-intelligence.git
+e-commerce,git@github.com:ursi-2020/e-commerce.git
+caisse,git@github.com:ursi-2020/caisse.git
+gestion-stock,git@github.com:ursi-2020/gestion-stock.git
+crm,git@github.com:ursi-2020/crm.git
+gestion-paiement,git@github.com:ursi-2020/gestion-paiement.git
+catalogue-produit,git@github.com:ursi-2020/catalogue-produits.git
+gestion-commercial,git@github.com:ursi-2020/gestion-commercial.git
+gestion-promotion,git@github.com:ursi-2020/gestion-promotion.git

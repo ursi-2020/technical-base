@@ -34,6 +34,7 @@ do
     esac
 done
 
+appName2=$(echo ${appName} | tr '-' '_')
 appdir="${mountedDirectory}/${appName}"
 if [[ -d "$appdir" ]]
 then
@@ -46,8 +47,8 @@ then
     sudo rm -rf ${venvdir}
 fi
 
-sudo -u postgres psql -c "DROP DATABASE IF EXISTS ${appName}_db;"
-sudo -u postgres psql -c "DROP USER IF EXISTS ${appName};"
+sudo -u postgres psql -c "DROP DATABASE IF EXISTS ${appName2}_db;"
+sudo -u postgres psql -c "DROP USER IF EXISTS ${appName2};"
 
 sed -i "/^${appName}\$/d" ${appListFile}
 echo "L'application ${appName} a été supprimé, le script est terminé"
