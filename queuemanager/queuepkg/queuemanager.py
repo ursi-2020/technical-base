@@ -7,7 +7,7 @@ def callback(ch, method, properties, body):
     print(" [x] Received %r" % body)
 
 
-def receive(queue_name):
+def receive(queue_name, callback):
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=url_queue_host))
     channel = connection.channel()
 
