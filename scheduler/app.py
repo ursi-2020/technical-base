@@ -1,15 +1,10 @@
-import sys
-sys.path.insert(0,'../apimanager/apipkg')
-import api_manager as api
-
 from flask import Flask, request, abort, render_template, jsonify
 from scheduler import Scheduler
 from clock import Clock
 import signal
 import logging
 from log import set_logging
-import api_manager as api
-import json
+from apipkg import api_manager as api
 
 app = Flask(__name__)
 speed = 50.0
@@ -38,7 +33,7 @@ ROUTES
 '''
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def dashboard():
     """
     Route: '/', methods=['GET', 'POST']
@@ -87,7 +82,7 @@ def schedule_message():
     if 'time' not in parameters.keys():
         logger.warning("Invalid HTTP request [Method = " + request.method + ", URL = " + request.url + "] time field not found.")
         abort(422)
-    result = sch.schedule(parameters.get('target_url'), parameters.get('time'), parameters.get('recurrence'), parameters.get('data'))
+    result = sch.schedule(parameters.get('target_url'), parameters.get('target_app'), parameters.get('time'), parameters.get('recurrence'), parameters.get('data'))
     if not result:
         logger.warning("Invalid HTTP request [Method = " + request.method + ", URL = " + request.url + "] Invalid fields.")
         abort(422)
@@ -152,7 +147,7 @@ def switch_state_clock():
     return 'success'
 
 
-@app.route('/clock/time', methods=['GET', 'POST'])
+@app.route('/clock/time', methods=['GET'])
 def get_time():
     """
     Route: '/clock/time', methods=['GET', 'POST']

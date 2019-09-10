@@ -6,6 +6,7 @@ from log import set_logging
 import clock
 import requests
 import logging
+from apipkg import api_manager as api
 
 
 class Scheduler:
@@ -25,7 +26,7 @@ class Scheduler:
         # print(e) # TODO Logger
         pass
 
-    def schedule(self, url: str, trigger_time: str, recurrence: str, data: str) -> bool:
+    def schedule(self, url: str, target_app: str, trigger_time: str, recurrence: str, data: str) -> bool:
         try:
             scheduled_datetime = datetime.strptime(trigger_time, self.time_format)
         except ValueError as e:
@@ -38,7 +39,7 @@ class Scheduler:
         if recurrence is None or not recurrence in self.recurrences:
             recurrence = self.recurrences[0]
 
-        self.schedule_list.add((scheduled_datetime, url, recurrence, data))
+        self.schedule_list.add((scheduled_datetime, url, target_app, recurrence, data))
 
         self.schedule_logger.info(
             "Scheduling action: [TIME_REQUIRED=" + str(scheduled_datetime) + "][TIME_CURRENT=" + str(self.fake_clock.get_time()) + "][TARGET=" + str(
@@ -49,11 +50,11 @@ class Scheduler:
         while True:
             if len(self.schedule_list) != 0:
                 time = self.fake_clock.get_time()
-                while len(self.schedule_list) != 0 and self.schedule_list[0][0] - time <= self.zero:
+                while len(self.schedule_list) != 0 and (self.schedule_list[0][0] - time) <= self.zero:
                     action = self.schedule_list.pop(0)
                     thread = Thread(target=self.send, args=(action, time))
                     thread.start()
-            sleep(0.1)
+            sleep(0.2)
 
     def send(self, action: tuple, time: datetime) -> None:
         self.schedule_logger.info(
@@ -61,19 +62,19 @@ class Scheduler:
                 action[1]) + "]")
         self.reschedule(action)
         try:
-            requests.post(action[1], data=action[2])
+            headers = {'Host': action[2]}
+            requests.post(api.api_services_url + action[1], data=action[4], headers = headers)
         except Exception as e:
             self.schedule_logger.info(
                 "Triggering action: [TIME_REQUIRED=" + str(action[0]) + "][TIME_CURRENT=" + str(
                     time) + "][TARGET=" + str(
-                    action[1]) + "]" + "Failed ===>" + e)
+                    action[1]) + "]" + "Failed ===>" + str(e))
 
     def reschedule(self, action: tuple) -> None:
         print(action)
-        if action[2] == 'none':
+        if action[3] == 'none':
             return
-        move: timedelta = None
-        move = timedelta(days=(action[2] == 'day'), minutes=(action[2] == 'minute'), hours=(action[2] == 'hour'),
-                         weeks=(action[2] == 'week'))
+        move = timedelta(days=(action[3] == 'day'), minutes=(action[3] == 'minute'), hours=(action[3] == 'hour'),
+                         weeks=(action[3] == 'week'))
         print(move)
-        self.schedule_list.add((action[0] + move, action[1], action[2], action[3]))
+        self.schedule_list.add((action[0] + move, action[1], action[2], action[3], action[4]))
