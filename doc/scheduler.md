@@ -2,34 +2,34 @@
 
 # Scheduler
 
-## Functions:
+## Routes:
 
-### dashboard
+### Dashboard
 ```
 Route: '/', methods=['GET', 'POST']
 :return: the dashboard of the scheduler app
 ```
 
-### info
+### Info
 ```
 Route: '/clock/info', methods=['GET', 'POST']
 Send all the information about the clock: current time, clock speed and clock state (paused/ running)
 :return: a json body with the information
 ```
 
-### list of schedules
+### List of schedules
 ```
 Route: '/schedule/list', methods=['GET']
 :return: returns an html table with all schedules tasks, as seen in the dashboard
 ```
 
-### size of schedule list
+### Size of schedule list
 ```
 Route: '/schedule/size', methods=['GET']
 :return: returns the number of scheduled future tasks
 ```
 
-### clock speed
+### Clock speed
 ```
 Route: '/clock/speed', methods=['GET', 'POST']
 If method is POST, will look for the 'new' param to set the new clock speed.
@@ -37,28 +37,28 @@ Example: /clock/speed?new=100
 :return: the clock speed, the new clock speed if it was updated
 ```
 
-### clock time
+### Clock time
 ```
 Route: '/clock/time', methods=['GET', 'POST']
 Get the current time from the clock.
 :return: a json body with the current time.
 ```
 
-### pause clock
+### Pause clock
 ```
 Route: '/clock/pause', methods=['POST']
 Pause the clock
 :return: 'success' on success or status 422 if clock was already paused.
 ```
 
-### resume clock
+### Resume clock
 ```
 Route: '/clock/resume', methods=['POST']
 Resume the clock
 :return: 'success' on success or status 422 if clock was already running.
 ```
 
-### schedule
+### Schedule
 ```
 Route: '/schedule/add', methods=["POST"]
 Add a task to schedule
@@ -66,7 +66,7 @@ Requires a json body: {"target_url"="", "target_app"="", "time"="", "recurrence"
 :return: 'Task has been scheduled' if all went well, else sends a status 422
 ```
 
-### pause / resume clock
+### Pause / resume clock
 ```
 Route: '/clock/switch', methods=['POST']
 Switch between the running and paused state of the clock.
