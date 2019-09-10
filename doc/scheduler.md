@@ -6,13 +6,13 @@
 
 ### Dashboard
 ```
-Route: '/', methods=['GET', 'POST']
+Route: '/', methods=['GET']
 :return: the dashboard of the scheduler app
 ```
 
 ### Info
 ```
-Route: '/clock/info', methods=['GET', 'POST']
+Route: '/clock/info', methods=['GET']
 Send all the information about the clock: current time, clock speed and clock state (paused/ running)
 :return: a json body with the information
 ```
@@ -39,7 +39,7 @@ Example: /clock/speed?new=100
 
 ### Clock time
 ```
-Route: '/clock/time', methods=['GET', 'POST']
+Route: '/clock/time', methods=['GET']
 Get the current time from the clock.
 :return: a json body with the current time.
 ```
