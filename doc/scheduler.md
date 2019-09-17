@@ -2,13 +2,20 @@
 
 # Scheduler
 
-## Routes
+## Usage
 
-### Dashboard
-```
-Route: '/', methods=['GET']
-:return: the dashboard of the scheduler app
-```
+The scheduler is used to get all data related to time and to schedule tasks.
+It is registered to the api manager with the name ```scheduler```.
+
+
+You can access a visual version of the scheduler through the port ```5000``` and the route ```/```.
+
+
+It provides a number of routes that are described below. The routes whose titles are preceded by ```*``` should only be used for development purposes.
+
+A function to help you schedule your tasks is given at the end of this dowument.
+
+## Routes
 
 ### Info
 ```
@@ -17,45 +24,11 @@ Send all the information about the clock: current time, clock speed and clock st
 :return: a json body with the information
 ```
 
-### List of schedules
-```
-Route: '/schedule/list', methods=['GET']
-:return: returns an html table with all schedules tasks, as seen in the dashboard
-```
-
-### Size of schedule list
-```
-Route: '/schedule/size', methods=['GET']
-:return: returns the number of scheduled future tasks
-```
-
-### Clock speed
-```
-Route: '/clock/speed', methods=['GET', 'POST']
-If method is POST, will look for the 'new' param to set the new clock speed.
-Example: /clock/speed?new=100
-:return: the clock speed, the new clock speed if it was updated
-```
-
 ### Clock time
 ```
 Route: '/clock/time', methods=['GET']
 Get the current time from the clock with format '%d/%m/%Y-%H:%M:%S'.
 :return: a json body with the current time.
-```
-
-### Pause clock
-```
-Route: '/clock/pause', methods=['POST']
-Pause the clock
-:return: 'success' on success or status 422 if clock was already paused.
-```
-
-### Resume clock
-```
-Route: '/clock/resume', methods=['POST']
-Resume the clock
-:return: 'success' on success or status 422 if clock was already running.
 ```
 
 ### Schedule
@@ -66,7 +39,47 @@ Requires a json body: {"target_url"="", "target_app"="", "time"="", "recurrence"
 :return: 'Task has been scheduled' if all went well, else sends a status 422
 ```
 
-### Pause / resume clock
+### *List of schedules
+```
+Route: '/schedule/list', methods=['GET']
+:return: returns an html table with all schedules tasks, as seen in the dashboard
+```
+
+### *Size of schedule list
+```
+Route: '/schedule/size', methods=['GET']
+:return: returns the number of scheduled future tasks
+```
+
+### *Clock speed
+```
+Route: '/clock/speed', methods=['GET', 'POST']
+If method is POST, will look for the 'new' param to set the new clock speed.
+Example: /clock/speed?new=100
+:return: the clock speed, the new clock speed if it was updated
+```
+
+### *Dashboard
+```
+Route: '/', methods=['GET']
+:return: the dashboard of the scheduler app
+```
+
+### *Pause clock
+```
+Route: '/clock/pause', methods=['POST']
+Pause the clock
+:return: 'success' on success or status 422 if clock was already paused.
+```
+
+### *Resume clock
+```
+Route: '/clock/resume', methods=['POST']
+Resume the clock
+:return: 'success' on success or status 422 if clock was already running.
+```
+
+### *Pause / resume clock
 ```
 Route: '/clock/switch', methods=['POST']
 Switch between the running and paused state of the clock.
@@ -95,10 +108,18 @@ None means it will be executed only once, minute means it will be executed every
 data: string => Optional data that can be passed to the targetted app through the request's body.
 ```
 ```
-def schedule_task(host, url, time, recurrence, data):
+source: string => The source of the schedule, your app name.
+It should be exactly the same for all schedules your app makes.
+```
+```
+name: string => Used to identify the schedules individually.
+Each schedules of your app must have a unique name. You should name them correctly for clarity.
+```
+```
+def schedule_task(host, url, time, recurrence, data, source, name):
     time_str = time.strftime('%d/%m/%Y-%H:%M:%S')
     headers = {'Host': 'scheduler'}
-    data = {"target_url": url, "target_app": host, "time": time_str, "recurrence": recurrence, "data": data}
+    data = {"target_url": url, "target_app": host, "time": time_str, "recurrence": recurrence, "data": data, "source_app": source, "name": name}
     r = requests.post(api.api_services_url + 'schedule/add', headers = headers, json = data)
     print(r.status_code)
     print(r.text)
