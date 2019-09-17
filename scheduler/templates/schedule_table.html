@@ -1,43 +1,27 @@
-<style>
-#fancy_table {
-    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-#fancy_table td, #fancy_table th {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-
-#fancy_table tr:nth-child(even){
-    background-color: #f2f2f2;
-}
-
-#fancy_table tr:hover {
-    background-color: #ddd;
-}
-
-#fancy_table th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: rgb(150, 150, 150);
-    color: white;
-}
-</style>
-
-<table id="fancy_table">
+<table id="schedule_table" class="table table-striped">
+    <thead class="thead-dark ">
     <tr>
-      <th>Scheduled time</th>
-      <th>Target</th>
-      <th>Reccurrence</th>
+        <th scope="col">Name</th>
+        <th scope="col">Source</th>
+        <th scope="col">Target</th>
+        <th scope="col">Schedule time</th>
+        <th scope="col">Reccurrence</th>
+        <th scope="col">Actions</th>
     </tr>
+    </thead>
+    <tbody>
     {% for item in scheduled_list %}
-      <tr>
-        <th>{{item[0]}}</th>
-        <th>{{item[1]}}</th>
-        <th>{{item[3]}}</th>
-      </tr>
+        <tr>
+            <th scope="row">{{ item[5] }}</th>
+            <td>{{ item[6] }}</td>
+            <td>{{ item[1] }}</td>
+            <td>{{ item[0] }}</td>
+            <td>{{ item[3] }}</td>
+            <td>
+                <button type="button" class="ml-2 btn btn-warning" onclick="delete_schedule('{{ item[5] }}','{{ item[6] }}')">Delete task</button>
+                <button type="button" class="ml-2 btn btn-danger" onclick="delete_source('{{ item[6] }}')">Delete app's tasks</button>
+            </td>
+        </tr>
     {% endfor %}
+    </tbody>
 </table>

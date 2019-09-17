@@ -1,16 +1,17 @@
-html, body {
-   margin:0;
-   padding:0;
-   height:100%;
+iframe:focus {
+    outline: none;
 }
 
-#content {
-   padding:10px;
-   padding-bottom:60px;
+iframe[seamless] {
+    display: block;
+    width: 100%;
+    border: none;
 }
 
-#footer {
-   position:absolute;
-   bottom:0;
-   width:100%;
+@media only screen and (min-width : 1200px) {
+
+    .container { width: 1500px; }
+
 }
+
+.urlcursor {cursor: pointer;}

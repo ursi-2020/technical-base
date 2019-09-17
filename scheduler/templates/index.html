@@ -1,23 +1,13 @@
 {% extends "layout.html" %}
 {% block title %}Index{% endblock %}
 {% block content %}
-    <style>
-        iframe:focus {
-            outline: none;
-        }
-
-        iframe[seamless] {
-            display: block;
-            width: 100%;
-            border: none;
-        }
-    </style>
     <script>
         function set_time() {
             let input = document.getElementById("new_speed");
             let xhr = new XMLHttpRequest();
             xhr.open("POST", "/clock/speed?new=" + input.value, true);
-            xhr.send(null)
+            xhr.send(null);
+            input.value = ""
         }
 
         function pause_resume() {
@@ -25,6 +15,25 @@
             xhr.open("POST", "/clock/switch", true);
             xhr.send(null)
         }
+
+        function reset() {
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "/reset", true);
+            xhr.send(null)
+        }
+
+        function delete_schedule(name, source) {
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", '/schedule/delete?name=' + name + '&source=' + source, true);
+            xhr.send(null)
+        }
+
+        function delete_source(source) {
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", '/app/delete?source=' + source, true);
+            xhr.send(null)
+        }
+
 
         function update_table() {
             fetch("/schedule/list")
@@ -49,12 +58,13 @@
                     return response.json();
                 })
                 .then(function (data) {
-                    document.getElementById("current_time").innerHTML = "Time: " + data[0];
-                    document.getElementById("current_speed").innerHTML = "Speed: " + data[1] + "x";
+                    document.getElementById("current_time").innerHTML = data[0];
+                    document.getElementById("current_speed").innerHTML = data[1] + "x";
                     let status = data[2] === "True" ? "Paused" : "Running";
-                    document.getElementById("pause_resume").value = data[2] === "True" ? "Resume" : "Pause";
+                    document.getElementById("resume").style.display = data[2] === "True" ? "unset" : "none";
+                    document.getElementById("pause").style.display = data[2] === "True" ? "none" : "unset";
                     document.getElementById("current_status").style.color = data[2] === "True" ? "orange" : "limegreen";
-                    document.getElementById("current_status").innerHTML = "Status: " + status;
+                    document.getElementById("current_status").innerHTML = status;
                     setTimeout(update_time, 1000)
                 })
                 .catch(function (error) {
@@ -66,20 +76,56 @@
         update_time();
 
     </script>
-    <h2>Informations</h2>
-    <h3 id="current_time"></h3>
-    <h3 id="current_speed"></h3>
-    <h3 id="current_status"></h3>
-    <h2>Actions</h2>
-    <div style="margin-bottom: 1%">
-        <input id='new_speed' placeholder="new speed" type="number" required min="0" step="0.1">
-        <input type='button' value="Change speed" onclick="set_time()">
+    <div class="row mt-5">
+        <div class="col-xl-5 card h-100">
+            <div class="card-body h-100">
+                <h2 class="card-title">Information</h2>
+                <table class="card-text table">
+                    <tbody>
+                    <tr>
+                        <td><h5>Time</h5></td>
+                        <td><h5 id="current_time"></h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Speed</h5></td>
+                        <td><h5 id="current_speed"></h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Status</h5></td>
+                        <td><h5 id="current_status"></h5></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="col-xl-2"></div>
+        <div class="col-xl-5 card h-100">
+            <div class="card-body h-100">
+                <h2 class="card-title">Actions</h2>
+                <div class="row align-items-center w-100 mt-3">
+                    <input id='new_speed' class="form-control w-50" placeholder="new speed" type="number" required min="0" step="0.1">
+                    <input type='button' class="btn btn-primary ml-3" value="Change speed" onclick="set_time()">
+                </div>
+                <div class="row align-items-center w-100 mt-3">
+                    <input id='pause' style="display: unset" class="btn btn-warning" type='button' value="Stop time" onclick="pause_resume()">
+                    <input id='resume' style="display: none" class="btn btn-success" type='button' value="Resume time" onclick="pause_resume()">
+                </div>
+                <div class="row align-items-center w-100 mt-3">
+                    <input id='reset' class="btn btn-danger" type='button' value="Reset scheduler" onclick="reset()">
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <input id='pause_resume' type='button' value="" onclick="pause_resume()">
+    <!-- col-sm-12 col-md-12 col-lg-12 col-xl-12 -->
+
+    <div class="row mt-5 w-100">
+        <div class="col">
+            <div id="table">
+            </div>
+        </div>
     </div>
-    <h2>List</h2>
-    <div id="table">
-    </div>
+
+
     <iframe name="nowhere" style="display:none"></iframe>
 {% endblock %}

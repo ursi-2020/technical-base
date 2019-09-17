@@ -1,7 +1,11 @@
 from datetime import datetime
-
+import copy
 
 class Clock:
+
+    start_time: datetime = None
+    speed_init: float = 1
+
     paused: bool = False
     paused_time: datetime = None
     real_start: datetime = None
@@ -9,9 +13,18 @@ class Clock:
     speed: float = 1
 
     def __init__(self, start_time: datetime = datetime(2019, 1, 7, 1), speed: float = 1) -> None:
+        self.start_time = start_time
+        self.speed_init = speed
+
         self.real_start = datetime.now()
-        self.start = start_time
+        self.start = copy.deepcopy(start_time)
         self.speed = speed if speed > 0 else 1
+
+    def reset(self):
+        self.real_start = datetime.now()
+        self.start = copy.deepcopy(self.start_time)
+        self.speed = self.speed_init if self.speed_init > 0 else 1
+        self.paused = False
 
     def set_speed(self, speed: float) -> float:
         real_current = datetime.now()

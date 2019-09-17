@@ -12,6 +12,15 @@ clk: Clock = Clock(speed=speed)
 sch: Scheduler = Scheduler(clk)
 
 '''
+TODO
+nom app
+nom task
+
+reset button
+remove task
+'''
+
+'''
 SIGNAL
 '''
 
@@ -82,7 +91,8 @@ def schedule_message():
     if 'time' not in parameters.keys():
         logger.warning("Invalid HTTP request [Method = " + request.method + ", URL = " + request.url + "] time field not found.")
         abort(422)
-    result = sch.schedule(parameters.get('target_url'), parameters.get('target_app'), parameters.get('time'), parameters.get('recurrence'), parameters.get('data'))
+    result = sch.schedule(parameters.get('target_url'), parameters.get('target_app'), parameters.get('time'), parameters.get('recurrence'), parameters.get('data'), parameters.get('name'),
+                          parameters.get('source_app'))
     if not result:
         logger.warning("Invalid HTTP request [Method = " + request.method + ", URL = " + request.url + "] Invalid fields.")
         abort(422)
@@ -172,6 +182,44 @@ def get_info():
     """
     logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
     return jsonify((str(clk.get_time().strftime(sch.time_format)), str(clk.speed), str(clk.paused)))
+
+
+@app.route('/reset', methods=['POST'])
+def reset():
+    sch.schedule_list.clear()
+    clk.reset()
+    return "OK"
+
+
+@app.route('/schedule/delete', methods=['POST'])
+def del_schedule():
+    name = request.args.get('name', default=None, type=str)
+    source = request.args.get('source', default=None, type=str)
+    if source is None or name is None:
+        abort(422)
+    l = sch.schedule_list
+    i = 0
+    while i < len(l):
+        if l[i][5] == name and l[i][6] == source:
+            l.pop(i)
+            i -= 1
+        i += 1
+    return "OK"
+
+
+@app.route('/app/delete', methods=['POST'])
+def del_app():
+    source = request.args.get('source', default=None, type=str)
+    if source is None:
+        abort(422)
+    l = sch.schedule_list
+    i = 0
+    while i < len(l):
+        if l[i][6] == source:
+            l.pop(i)
+            i -= 1
+        i += 1
+    return "OK"
 
 
 if __name__ == '__main__':

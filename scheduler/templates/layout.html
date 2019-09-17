@@ -1,17 +1,25 @@
 <!doctype html>
 <html>
-  <head>
+<link rel="script" href="{{ url_for('static', filename='bootstrap.js') }}">
+<link rel="script" href="{{ url_for('static', filename='bootstrap.bundle.js') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-grid.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-reboot.css') }}">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+
+
+<head>
     {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>{% block title %}{% endblock %} - Scheduler</title>
+        <title>{% block title %}{% endblock %} - Scheduler</title>
     {% endblock %}
-  </head>
-  <body>
-    <div id="content">{% block content %}{% endblock %}</div>
-    <div id="footer">
-        {% block footer %}
-        &copy; Copyright 2010 by <a href="https://sigl.epita.fr/">SIGL 2020</a>.
-        {% endblock %}
-      </div>
-  </body>
+</head>
+<body>
+<nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand " href="#" style="font-size: 4rem">
+        Scheduler
+    </a>
+</nav>
+<div id="content" class="container">{% block content %}{% endblock %}</div>
+</body>
 </html>
