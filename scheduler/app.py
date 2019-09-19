@@ -5,6 +5,7 @@ import signal
 import logging
 from log import set_logging
 from apipkg import api_manager as api
+import copy
 
 app = Flask(__name__)
 speed = 50.0
@@ -13,11 +14,7 @@ sch: Scheduler = Scheduler(clk)
 
 '''
 TODO
-nom app
-nom task
-
-reset button
-remove task
+schedule month / year
 '''
 
 '''
@@ -49,7 +46,8 @@ def dashboard():
     :return: the dashboard of the scheduler app
     """
     logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
-    return render_template("index.html", speed=clk.speed, paused=clk.paused)
+
+    return render_template("index.html", speed=clk.speed, paused=clk.paused, recurrence_list=sch.recurrences, time=str(clk.start_time.strftime(sch.time_format)))
 
 
 @app.route('/schedule/size', methods=['GET'])
@@ -69,7 +67,7 @@ def get_schedule_list():
     :return: returns an html table with all schedules tasks, as seen in the dashboard
     """
     logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
-    return render_template("schedule_table.html", scheduled_list=sch.schedule_list)
+    return render_template("schedule_table.html", scheduled_list=copy.deepcopy(sch.schedule_list))
 
 
 @app.route('/schedule/add', methods=["POST"])
@@ -97,6 +95,17 @@ def schedule_message():
         logger.warning("Invalid HTTP request [Method = " + request.method + ", URL = " + request.url + "] Invalid fields.")
         abort(422)
     return "Task has been scheduled"
+
+
+@app.route('/schedule/form', methods=["POST"])
+def schedule_form():
+    form = request.form
+    print(form)
+    result = sch.schedule(form['url'], form['target'], form['time'], form['recurrence'], form['data'], form['name'], 'scheduler')
+    if not result:
+        logger.warning("Invalid HTTP request [Method = " + request.method + ", URL = " + request.url + "] Invalid fields.")
+        abort(422)
+    return "OK"
 
 
 @app.route('/clock/speed', methods=['GET', 'POST'])

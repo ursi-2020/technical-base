@@ -14,7 +14,7 @@ class Scheduler:
     schedule_list: SortedList = SortedList()
     zero: timedelta = timedelta()
     fake_clock: clock.Clock = None
-    recurrences: list = ["none", "minute", "hour", "day", "week", "month", "year"]
+    recurrences: list = ["none", "minute", "hour", "day", "week"]
     schedule_logger: logging.Logger = set_logging("schedule")
 
     def __init__(self, fake_clock: clock.Clock):
@@ -75,7 +75,7 @@ class Scheduler:
 
     def reschedule(self, action: tuple) -> None:
         print(action)
-        if action[3] == 'none':
+        if action[3] == self.recurrences[0]:
             return
         move = timedelta(days=(action[3] == 'day'), minutes=(action[3] == 'minute'), hours=(action[3] == 'hour'), weeks=(action[3] == 'week'))
         print(move)
