@@ -13,7 +13,9 @@ You can access a visual version of the scheduler through the port ```5000``` and
 
 It provides a number of routes that are described below. The routes whose titles are preceded by ```*``` should **only be used for development purposes**.
 
-A function to help you schedule your tasks is given at the end of this dowument.
+A function to help you schedule your tasks is given at the end of this document.
+
+The scheduler only dispatches tasks with the method ```POST```.
 
 ## Routes
 
