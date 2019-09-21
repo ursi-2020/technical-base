@@ -1,4 +1,4 @@
-[home](../index.md)
+[Sommaire](https://ursi-2020.github.io/Documentation/)
 
 # VM installation:
 
