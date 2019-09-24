@@ -6,5 +6,5 @@ gestion-stock,git@github.com:ursi-2020/gestion-stock.git
 crm,git@github.com:ursi-2020/crm.git
 gestion-paiement,git@github.com:ursi-2020/gestion-paiement.git
 catalogue-produit,git@github.com:ursi-2020/catalogue-produits.git
-gestion-commercial,git@github.com:ursi-2020/gestion-commercial.git
+gestion-commercial,git@github.com:ursi-2020/gestion-commerciale.git
 gestion-promotion,git@github.com:ursi-2020/gestion-promotion.git
