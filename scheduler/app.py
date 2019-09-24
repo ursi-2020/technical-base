@@ -197,6 +197,7 @@ def get_info():
 def reset():
     sch.schedule_list.clear()
     clk.reset()
+    logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
     return "OK"
 
 
@@ -213,6 +214,8 @@ def del_schedule():
             l.pop(i)
             i -= 1
         i += 1
+    logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
+
     return "OK"
 
 
@@ -228,6 +231,8 @@ def del_app():
             l.pop(i)
             i -= 1
         i += 1
+    logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
+
     return "OK"
 
 

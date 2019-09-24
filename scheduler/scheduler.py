@@ -30,10 +30,12 @@ class Scheduler:
         try:
             scheduled_datetime = datetime.strptime(trigger_time, self.time_format)
         except ValueError as e:
-            print(e)  # TODO Logger
+            self.schedule_logger.warning("Failed to schedule task due to bad datetime format for datetime: " + trigger_time + ".")
             return False
 
-        if scheduled_datetime - self.fake_clock.get_time() < self.zero:
+        fake_time = self.fake_clock.get_time()
+        if scheduled_datetime - fake_time < self.zero:
+            self.schedule_logger.warning("Failed to schedule task due to datetime (" + trigger_time + ") being prior to current datetime (" + str(fake_time) + ")")
             return False
 
         if recurrence is None or not recurrence in self.recurrences:
@@ -70,8 +72,8 @@ class Scheduler:
     def post(self, url, data, headers, req, time):
         try:
             requests.post(url, data=data, headers=headers)
-        except Exception:
-            print("fail")
+        except Exception as e:
+            self.schedule_logger.error("Failed riggering action: [TIME_REQUIRED=" + str(time) + "][TIME_CURRENT=" + str(self.fake_clock.get_time()) + "][TARGET=" + url + "]" + str(e))
 
     def reschedule(self, action: tuple) -> None:
         print(action)
@@ -80,3 +82,4 @@ class Scheduler:
         move = timedelta(days=(action[3] == 'day'), minutes=(action[3] == 'minute'), hours=(action[3] == 'hour'), weeks=(action[3] == 'week'))
         print(move)
         self.schedule_list.add((action[0] + move, action[1], action[2], action[3], action[4], action[5], action[6]))
+        self.schedule_logger.info("RE Scheduling action: [TIME_REQUIRED=" + str(action[0] + move) + "][TIME_CURRENT=" + str(self.fake_clock.get_time()) + "][TARGET=" + action[2] + action[1] + "]")
