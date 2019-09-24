@@ -234,5 +234,5 @@ def del_app():
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, keyboard_interrupt_handler)
     api.unregister('scheduler')
-    api.register('http://localhost:5000', 'scheduler')
-    app.run(host='localhost', port=5000)
+    api.register('http://0.0.0.0:5000', 'scheduler')
+    app.run(host='0.0.0.0', port=5000)
