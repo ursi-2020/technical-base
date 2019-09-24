@@ -37,7 +37,8 @@ Get the current time from the clock with format '%d/%m/%Y-%H:%M:%S'.
 ```
 Route: '/schedule/add', methods=["POST"]
 Add a task to schedule
-Requires a json body: {"target_url"="", "target_app"="", "time"="", "recurrence"="", "data"=""}
+Requires a json body:
+{"target_url": "", "target_app": "", "time": "", "recurrence": "", "data": "", "source_app": "", "name": ""}
 :return: 'Task has been scheduled' if all went well, else sends a status 422
 ```
 
