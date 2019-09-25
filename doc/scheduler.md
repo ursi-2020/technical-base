@@ -137,7 +137,7 @@ recurrence: string => The recurrence of the task: ["none", "minute", "hour", "da
 None means it will be executed only once, minute means it will be executed every minute, ...
 ```
 ```
-data: string => Optional data that can be passed to the targetted app through the request's body. (The parameters of your POST request that will be called by the scheduler)
+data: string => Optional data that can be passed to the targetted app through the request's body. (The body of your POST request that will be called by the scheduler)
 ```
 ```
 source: string => The source of the schedule, your app name.
