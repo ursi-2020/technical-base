@@ -126,8 +126,9 @@ The paramaters to input are the following:
 host: string => The app targetted by the scheduled task.
 ```
 ```
-url: string => URL in the targetted app. (you need to give the URL of a POST request that you create in YOUR code,
-the scheduler will call this request each recurrence)
+url: string => URL in the targetted app.
+(you need to give the URL of a POST request that you create in YOUR code,
+the scheduler will call this request at each occurences)
 ```
 ```
 time: datetime objet => The time at which the task should be executed.
@@ -137,7 +138,8 @@ recurrence: string => The recurrence of the task: ["none", "minute", "hour", "da
 None means it will be executed only once, minute means it will be executed every minute, ...
 ```
 ```
-data: string => Optional data that can be passed to the targetted app through the request's body. (The body of your POST request that will be called by the scheduler)
+data: string => Optional data that can be passed to the targetted app through the request's body.
+(The body of your POST request that will be called by the scheduler)
 ```
 ```
 source: string => The source of the schedule, your app name.
