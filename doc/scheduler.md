@@ -42,16 +42,41 @@ Requires a json body:
 :return: 'Task has been scheduled' if all went well, else sends a status 422
 ```
 
-### *List of schedules
+### List of schedules
 ```
 Route: '/schedule/list', methods=['GET']
 :return: returns an html table with all schedules tasks, as seen in the dashboard
 ```
 
-### *Size of schedule list
+### Json list of schedules
+```
+Route: '/schedule/list', methods=['GET']
+:return: returns a json list with all schedules tasks
+```
+
+### Size of schedule list
 ```
 Route: '/schedule/size', methods=['GET']
 :return: returns the number of scheduled future tasks
+```
+
+### *Delete task
+```
+Route: '/schedule/delete', methods=['POST']
+?name=<name>&source=<source>
+name: str => the name of the task to delete.
+source: str => the source application this task belongs to.
+Delete a scheduled task by its name and source.
+:return: 'OK'
+```
+
+### *Delete all app's tasks
+```
+Route: '/app/delete', methods=['POST']
+?source=<source>
+source: str => the source application.
+Delete all scheduled tasks belonging to the 'source' application.
+:return: 'OK'
 ```
 
 ### *Clock speed
@@ -94,25 +119,6 @@ Switch between the running and paused state of the clock.
 Route: '/reset', methods=['POST']
 Reset the scheduler. Set the clock back to its intial time, at its intial speed.
 Removes all scheduled tasks.
-:return: 'OK'
-```
-
-### *Delete task
-```
-Route: '/schedule/delete', methods=['POST']
-?name=<name>&source=<source>
-name: str => the name of the task to delete.
-source: str => the source application this task belongs to.
-Delete a scheduled task by its name and source.
-:return: 'OK'
-```
-
-### *Delete all app's tasks
-```
-Route: '/app/delete', methods=['POST']
-?source=<source>
-source: str => the source application.
-Delete all scheduled tasks belonging to the 'source' application.
 :return: 'OK'
 ```
 
