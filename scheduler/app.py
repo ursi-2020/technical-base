@@ -1,11 +1,13 @@
 from flask import Flask, request, abort, render_template, jsonify
 from scheduler import Scheduler
+from datetime import datetime
 from clock import Clock
 import signal
 import logging
 from log import set_logging
 from apipkg import api_manager as api
 import copy
+import json
 
 app = Flask(__name__)
 speed = 50.0
@@ -69,6 +71,23 @@ def get_schedule_list():
     logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
     return render_template("schedule_table.html", scheduled_list=copy.deepcopy(sch.schedule_list))
 
+
+def default(o):
+    if isinstance(o, datetime):
+        return datetime.strftime(o, sch.time_format)
+
+
+@app.route('/schedule/json', methods=['GET'])
+def get_schedule_json():
+    """
+    Route: '/schedule/list', methods=['GET']
+    :return: returns an html table with all schedules tasks, as seen in the dashboard
+    """
+    logger.info("HTTP request [Method = " + request.method + ", URL = " + request.url + "]")
+    array = []
+    for item in sch.schedule_list:
+        array.append(item)
+    return json.dumps(array, default=default)
 
 @app.route('/schedule/add', methods=["POST"])
 def schedule_message():
