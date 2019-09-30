@@ -42,16 +42,41 @@ Requires a json body:
 :return: 'Task has been scheduled' if all went well, else sends a status 422
 ```
 
-### *List of schedules
+### List of schedules
 ```
 Route: '/schedule/list', methods=['GET']
 :return: returns an html table with all schedules tasks, as seen in the dashboard
 ```
 
-### *Size of schedule list
+### Json list of schedules
+```
+Route: '/schedule/list', methods=['GET']
+:return: returns a json list with all schedules tasks
+```
+
+### Size of schedule list
 ```
 Route: '/schedule/size', methods=['GET']
 :return: returns the number of scheduled future tasks
+```
+
+### *Delete task
+```
+Route: '/schedule/delete', methods=['POST']
+?name=<name>&source=<source>
+name: str => the name of the task to delete.
+source: str => the source application this task belongs to.
+Delete a scheduled task by its name and source.
+:return: 'OK'
+```
+
+### *Delete all app's tasks
+```
+Route: '/app/delete', methods=['POST']
+?source=<source>
+source: str => the source application.
+Delete all scheduled tasks belonging to the 'source' application.
+:return: 'OK'
 ```
 
 ### *Clock speed
@@ -97,25 +122,6 @@ Removes all scheduled tasks.
 :return: 'OK'
 ```
 
-### *Delete task
-```
-Route: '/schedule/delete', methods=['POST']
-?name=<name>&source=<source>
-name: str => the name of the task to delete.
-source: str => the source application this task belongs to.
-Delete a scheduled task by its name and source.
-:return: 'OK'
-```
-
-### *Delete all app's tasks
-```
-Route: '/app/delete', methods=['POST']
-?source=<source>
-source: str => the source application.
-Delete all scheduled tasks belonging to the 'source' application.
-:return: 'OK'
-```
-
 
 ## Functions
 
@@ -127,6 +133,8 @@ host: string => The app targetted by the scheduled task.
 ```
 ```
 url: string => URL in the targetted app.
+(you need to give the URL of a POST request that you create in YOUR code,
+the scheduler will call this request at each occurences)
 ```
 ```
 time: datetime objet => The time at which the task should be executed.
@@ -137,6 +145,7 @@ None means it will be executed only once, minute means it will be executed every
 ```
 ```
 data: string => Optional data that can be passed to the targetted app through the request's body.
+(The body of your POST request that will be called by the scheduler)
 ```
 ```
 source: string => The source of the schedule, your app name.

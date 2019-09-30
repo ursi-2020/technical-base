@@ -16,7 +16,7 @@ do
     "que des caractères alphanumériques en minuscule"
     read appName
 
-    if ([[ ! -z "$appName" ]] && grep -Fxq "$appName" "$appListFile") || [[ "$appName" == "scheduler" ]] || [[ "$appName" == "postgres" ]] || [[ -d "${mountedDirectory}/${appName}" ]]
+    if ([[ ! -z "$appName" ]] && grep -Fxq "$appName" "$appListFile") || [[ "$appName" == "scheduler" ]] || [[ "$appName" == "drive" ]] || [[ "$appName" == "postgres" ]] || [[ -d "${mountedDirectory}/${appName}" ]]
     then
         appName=
         echo "L'application ${appName} existe déjà"

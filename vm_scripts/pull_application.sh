@@ -22,7 +22,7 @@ do
         echo "L'application ${appName} n'existe pas"
     fi
 
-    if ([[ ! -z "$appName" ]] && grep -Fxq "$appName" "$appListFile") || [[ "$appName" == "scheduler" ]] || [[ "$appName" == "postgres" ]]
+    if ([[ ! -z "$appName" ]] && grep -Fxq "$appName" "$appListFile") || [[ "$appName" == "scheduler" ]] || [[ "$appName" == "drive" ]] || [[ "$appName" == "postgres" ]]
     then
         appName=
         echo "L'application ${appName} existe déjà"
