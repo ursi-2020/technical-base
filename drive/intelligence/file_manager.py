@@ -1,22 +1,32 @@
+import shutil
+import requests
 from datetime import datetime
-from drive.app_dic import get_path, append_queue
 
-
-def write_to_distant(content, app, file_name):
+def write(name_sender, path_file_sender, name_file, reciever):
     dateTimeObj = datetime.now()
     timestampStr = dateTimeObj.strftime("%d-%b-%Y-%H-%M-%S-%f")
-    path_dest = get_path(app) + "/" + file_name + "_" + timestampStr
-    f = open(path_dest, "w+")
-    f.write(content)
-    f.close()
-    return False
-
-def write(app, path, file_name):
+    path_to_send = reciever.path_folder + "/" + name_file + timestampStr
     try:
-        f = open(path, "r")
-        content = f.read()
-        f.close()
-        return write_to_distant(content, app, file_name)
-    except Exception:
-        print(path + ' error, maybe bad access or directory not available')
-        return False
+        shutil.copyfile(path_file_sender, path_to_send)
+        print("File copied successfully.")
+
+        # If source and destination are same
+    except shutil.SameFileError:
+        print("Source and destination represents the same file.")
+
+        # If destination is a directory.
+    except IsADirectoryError:
+        print("Destination is a directory.")
+
+        # If there is any permission issue
+    except PermissionError:
+        print("Permission denied.")
+
+        # For other errors
+    except:
+        print("Error occurred while copying file.")
+
+    r = requests.post(reciever.route, data={'path': path_to_send, 'app': name_sender})
+    return True
+
+        # sh util python pour copier les files python

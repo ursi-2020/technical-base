@@ -1,5 +1,9 @@
 from flask_restful import reqparse, Resource
-from drive.app_dic import add_app_to_dict
+import json
+from flask import Response
+from drive.models import App
+from drive.db import db
+
 
 
 parser = reqparse.RequestParser()
@@ -13,6 +17,19 @@ parser.add_argument('route', type=str, required=True, help='the POST request dri
 class Register(Resource):
     def post(self):
         args = parser.parse_args(strict=True)
-        add_app_to_dict(args['app'], args['path'], args['route'])
-        #request.remote_user
-        return "successfully registered",  200
+
+        app = App.query.filter_by(name=args['app']).first()
+        if app is not None:
+            return Response(
+                response=json.dumps(dict(error='App exist, you are already registered with this name')),
+                status=400, mimetype='application/json')
+
+        new_app = App(name=args['name'], path_folder=args['path'],
+                                      route=args['route'])
+
+        db.session.add(new_app)
+        db.session.commit()
+
+        return Response(
+            response=json.dumps(dict(info='you are successfully registered')),
+            status=200, mimetype='application/json')
