@@ -166,7 +166,7 @@ De la même façon que send_request la fonction post_request va envoyer une requ
 Dans l'exemple ci-contre l'application Gestion-Magasin schedule une tache qui a pour nom 'Magasin: Update Products'  et qui effectuera à partir du moment (ici de l'heure) de la clock, tous les jours, une requête sur '/products/update/'.
 
 **NOTE:**
-* Pour éviter que votre tache soit schedule en retard par rapport au temps de la clock, ajouter du temps à l'argument *time* passé en paramètre à la fonction schedule_task()
+* Pour éviter que votre tache soit schedule en retard par rapport au temps de la clock, ajoutez du temps à l'argument *time* passé en paramètre à la fonction schedule_task()
 
 ---
 
