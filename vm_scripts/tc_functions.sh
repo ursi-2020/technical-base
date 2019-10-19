@@ -27,25 +27,17 @@ log_success() {
     echo -e "${GREEN} [${formatted_date}][Applications Helper]${@} ${NC}";
 }
 
-pull_app() {
-    if [[ -z "$1" ]]
+create_env_then_clone_app()
+{
+    if [[ -z "$1" ]] || [[ -z "$2" ]]
     then
         return 1
     fi
 
     appName=${1}
+    appDir=${2}
+
     appName_formatted=$(echo ${appName} | tr '-' '_')
-    git_adress=$(grep "^${appName}," ${gitListFile} | cut -d, -f2)
-    port=$(grep "^${appName}," ${gitListFile} | cut -d, -f3)
-    appdir="${mountedDirectory}/${appName}"
-    mkdir -p ${appdir}
-    clonedir="/tmp/pulled-app/"
-
-    if [[ -d "${venvDirectory}/${appName}_venv" ]]
-    then
-        sudo rm -rf "${venvDirectory}/${appName}_venv"
-    fi
-
     virtualenv "${venvDirectory}/${appName}_venv"
     setfacl -Rm "u:${1}:rwx" "${venvDirectory}/${appName}_venv"
     log_debug "Le python virtual env de l'application a été créé au chemin suivant: ${venvDirectory}/${appName}_venv"
@@ -61,22 +53,71 @@ pull_app() {
     log_debug "Utilisateur propriétaire de la base de données: ${appName_formatted}"
     log_debug "Mot de passe de l'utilisateur: ${dbpasswd}"
 
+    clonedir="/tmp/example-app/"
+
     if [[ -d ${clonedir} ]]
     then
         rm -rf ${clonedir}
     fi
 
-    keyfile="/home/socle-technique/.ssh/github"
     if [[ ! -f ${keyfile} ]]
     then
-        log_error "Impossible de trouver la clé ssh pour cloner l'application "${appName}", le script va se stopper"
+        log_error "Impossible de trouver la clé ssh pour cloner l'appli blanche, le script va se stopper"
         exit 1
     fi
-    ssh-agent bash -c "ssh-add ${keyfile}; git clone ${git_adress} ${clonedir}"
-    rsync -r ${clonedir} ${appdir}
-    log_debug "Le dossier de l'application a été téléchargé au chemin suivant : ${appdir}"
 
-    envFile="${appdir}/variables.env"
+    ssh-agent bash -c "ssh-add ${keyfile}; git clone git@github.com:ursi-2020/example-app.git ${clonedir}"
+    rsync -r --exclude '.git*' ${clonedir} ${appDir}
+}
+
+add_app() {
+    if [[ -z "$1" ]]
+    then
+        return 1
+    fi
+
+    appName=${1}
+
+    appName_formatted=$(echo ${appName} | tr '-' '_')
+    appDir="${mountedDirectory}/${appName}"
+    mkdir ${appDir}
+    log_debug "Le dossier de l'application a été créé au chemin suivant: ${appDir}"
+    create_env_then_clone_app ${appName} ${appDir}
+    log_debug "Un code example d'application a été copié dans le dossier de l'application (${appDir})"
+
+    envFile="${appDir}/variables.env"
+    echo "DJANGO_DB_USER=${appName_formatted}" > ${envFile}
+    echo "DJANGO_DB_NAME=${appName_formatted}_db" >> ${envFile}
+    echo "DJANGO_DB_PASSWORD=${dbpasswd}" >> ${envFile}
+    echo "DJANGO_APP_NAME=${appName}" >> ${envFile}
+    echo "WEBSERVER_PORT=8100" >> ${envFile}
+
+    echo ${appName} >> ${appListFile}
+}
+
+pull_app() {
+    if [[ -z "$1" ]]
+    then
+        return 1
+    fi
+
+    appName=${1}
+    appName_formatted=$(echo ${appName} | tr '-' '_')
+    git_adress=$(grep "^${appName}," ${gitListFile} | cut -d, -f2)
+    port=$(grep "^${appName}," ${gitListFile} | cut -d, -f3)
+    appDir="${mountedDirectory}/${appName}"
+    mkdir -p ${appDir}
+    clonedir="/tmp/pulled-app/"
+
+    if [[ -d "${venvDirectory}/${appName}_venv" ]]
+    then
+        sudo rm -rf "${venvDirectory}/${appName}_venv"
+    fi
+
+    create_env_then_clone_app ${appName} ${appDir}
+    log_debug "Le dossier de l'application a été téléchargé au chemin suivant : ${appDir}"
+
+    envFile="${appDir}/variables.env"
     echo "DJANGO_DB_USER=${appName_formatted}" > ${envFile}
     echo "DJANGO_DB_NAME=${appName_formatted}_db" >> ${envFile}
     echo "DJANGO_DB_PASSWORD=${dbpasswd}" >> ${envFile}
@@ -96,10 +137,10 @@ remove_app() {
     appName=${1}
 
     appName_formatted=$(echo ${appName} | tr '-' '_')
-    appdir="${mountedDirectory}/${appName}"
-    if [[ -d "$appdir" ]]
+    appDir="${mountedDirectory}/${appName}"
+    if [[ -d "$appDir" ]]
     then
-        sudo rm -rf ${appdir}
+        sudo rm -rf ${appDir}
     fi
 
     venvdir="${venvDirectory}/${appName}_venv"
