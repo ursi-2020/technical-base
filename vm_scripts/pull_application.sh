@@ -5,6 +5,7 @@ source ./tc_variables.sh
 source ./tc_functions.sh
 
 appName=
+exec_user=${1}
 
 if [[ ! -d "$mountedDirectory" ]]
 then

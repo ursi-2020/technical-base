@@ -39,7 +39,8 @@ create_env_then_clone_app()
 
     appName_formatted=$(echo ${appName} | tr '-' '_')
     virtualenv "${venvDirectory}/${appName}_venv"
-    setfacl -Rm "u:${1}:rwx" "${venvDirectory}/${appName}_venv"
+    log_debug "Exec user: ${exec_user}"
+    setfacl -Rm "u:${exec_user}:rwx" "${venvDirectory}/${appName}_venv"
     log_debug "Le python virtual env de l'application a été créé au chemin suivant: ${venvDirectory}/${appName}_venv"
 
     dbpasswd=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 7)
