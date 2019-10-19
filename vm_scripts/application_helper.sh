@@ -1,7 +1,9 @@
 #!/bin/bash
 
+source ./tc_functions.sh
+
 error(){
-    echo "ERREUR : paramètres invalides !" >&2
+    log_error "ERREUR : paramètres invalides !" >&2
     echo "utilisez l'option -h pour en savoir plus" >&2
     exit 1
 }

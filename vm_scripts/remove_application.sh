@@ -1,12 +1,14 @@
 #!/bin/bash
 
 set -e
-source /usr/local/bin/tc_variables.sh
+source ./tc_variables.sh
+source ./tc_functions.sh
+
 appName=
 
 if [[ ! -d "$mountedDirectory" ]]
 then
-    echo "Impossible de trouver le répertoire ${mountedDirectory}, le script va se stopper"
+    log_error "Impossible de trouver le répertoire ${mountedDirectory}, le script va se stopper"
     exit 1
 fi
 
@@ -19,7 +21,7 @@ do
     if [[ ! -z "$appName" ]] &&  ! grep -Fxq "$appName" "$appListFile"
     then
         appName=
-        echo "L'application ${appName} n'existe pas"
+        log_warning "L'application ${appName} n'existe pas"
     fi
 done
 
@@ -34,22 +36,13 @@ do
     esac
 done
 
-appName2=$(echo ${appName} | tr '-' '_')
-appdir="${mountedDirectory}/${appName}"
-if [[ -d "$appdir" ]]
+remove_app ${appName}
+return_code=${?}
+if [[ ${return_code} -eq 0 ]]
 then
-    sudo rm -rf ${appdir}
+    log_success "Le script s'est terminé sans problème"
+    exit 0
+else
+    log_error "Une erreur s'est produit lors de l'execution du script"
+    exit ${return_code}
 fi
-
-venvdir="${venvDirectory}/${appName}_venv"
-if [[ -d "$venvdir" ]]
-then
-    sudo rm -rf ${venvdir}
-fi
-
-sudo -u postgres psql -c "DROP DATABASE IF EXISTS ${appName2}_db;"
-sudo -u postgres psql -c "DROP USER IF EXISTS ${appName2};"
-
-sed -i "/^${appName}\$/d" ${appListFile}
-echo "L'application ${appName} a été supprimé, le script est terminé"
-exit 0
