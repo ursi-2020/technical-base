@@ -3,3 +3,4 @@ Flask-RESTful
 SQLAlchemy
 Flask-SQLAlchemy
 Flask-Cors
+requests
