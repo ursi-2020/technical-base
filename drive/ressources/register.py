@@ -1,8 +1,8 @@
 from flask_restful import reqparse, Resource
 import json
 from flask import Response
-from drive.models import App
-from drive.db import db
+from models import App
+from db import db
 
 
 

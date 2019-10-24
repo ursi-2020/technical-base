@@ -1,6 +1,6 @@
 from sqlalchemy.ext.declarative import declarative_base
-from drive.db import db
-from drive.to_json import OutputMixin
+from db import db
+from to_json import OutputMixin
 
 Base = declarative_base()
 

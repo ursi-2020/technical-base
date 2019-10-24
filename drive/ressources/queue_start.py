@@ -1,7 +1,7 @@
 import threading
 from flask_restful import Resource
-from drive.app_dic import queue_pop, get_was_get, set_was_get_to_true
-from drive.intelligence.file_manager import write
+from app_dic import queue_pop, get_was_get, set_was_get_to_true
+from intelligence.file_manager import write
 
 def manage_queue():
     while (True):

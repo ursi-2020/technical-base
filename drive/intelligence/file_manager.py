@@ -28,5 +28,3 @@ def write(name_sender, path_file_sender, name_file, reciever):
 
     r = requests.post(reciever.route, data={'path': path_to_send, 'app': name_sender})
     return True
-
-        # sh util python pour copier les files python

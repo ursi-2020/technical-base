@@ -1,9 +1,9 @@
 from flask_restful import reqparse, Resource
 import json
 from flask import Response
-from drive.intelligence.file_manager import write
-from drive.models import Send_files, App
-from drive.db import db
+from intelligence.file_manager import write
+from models import Send_files, App
+from db import db
 
 
 parser = reqparse.RequestParser()

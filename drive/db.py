@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful import Api
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from drive.config import Config
+from config import Config
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"*": {"origins": "*"}})

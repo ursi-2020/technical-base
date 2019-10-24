@@ -1,8 +1,8 @@
-from drive.ressources.register import Register
-from drive.ressources.send_files import Send
-from drive.ressources.manage_file import Manage
-from drive.db import recreate_database, create_app
-from drive.db import app, api
+from ressources.register import Register
+from ressources.send_files import Send
+from ressources.manage_file import Manage
+from db import recreate_database, create_app
+from db import app, api
 
 #api.add_resource(Queue, '/')
 api.add_resource(Register, '/register')
