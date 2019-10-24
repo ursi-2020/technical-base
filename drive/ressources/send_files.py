@@ -1,8 +1,8 @@
 import json
 from flask import Response
 from flask_restful import reqparse, Resource
-from drive.models import App, Send_files
-from drive.db import db
+from models import App, Send_files
+from db import db
 
 parser = reqparse.RequestParser()
 parser.add_argument('me', type=str, required=True, help='Name of your app')
