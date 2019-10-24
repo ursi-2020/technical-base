@@ -1,5 +1,5 @@
-flask
-flask-restful
-flask_sqlalchemy
-flask_cors
-json
+Flask
+Flask-RESTful
+SQLAlchemy
+Flask-SQLAlchemy
+Flask-Cors
