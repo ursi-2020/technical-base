@@ -29,13 +29,14 @@ log_success() {
 
 create_env_then_clone_app()
 {
-    if [[ -z "$1" ]] || [[ -z "$2" ]]
+    if [[ -z "$1" ]] || [[ -z "$2" ]] || [[ -z "$3" ]]
     then
         return 1
     fi
 
     appName=${1}
     appDir=${2}
+    cloneAddress=${3}
 
     appName_formatted=$(echo ${appName} | tr '-' '_')
     virtualenv "${venvDirectory}/${appName}_venv"
@@ -54,11 +55,11 @@ create_env_then_clone_app()
     log_debug "Utilisateur propriétaire de la base de données: ${appName_formatted}"
     log_debug "Mot de passe de l'utilisateur: ${dbpasswd}"
 
-    clonedir="/tmp/example-app/"
+    cloneDir="/tmp/clone-temp/"
 
-    if [[ -d ${clonedir} ]]
+    if [[ -d ${cloneDir} ]]
     then
-        rm -rf ${clonedir}
+        rm -rf ${cloneDir}
     fi
 
     if [[ ! -f ${keyfile} ]]
@@ -67,8 +68,8 @@ create_env_then_clone_app()
         exit 1
     fi
 
-    ssh-agent bash -c "ssh-add ${keyfile}; git clone git@github.com:ursi-2020/example-app.git ${clonedir}"
-    rsync -r --exclude '.git*' ${clonedir} ${appDir}
+    ssh-agent bash -c "ssh-add ${keyfile}; git clone ${cloneAddress} ${cloneDir}"
+    rsync -r --exclude '.git*' ${cloneDir} ${appDir}
 }
 
 add_app() {
@@ -83,7 +84,8 @@ add_app() {
     appDir="${mountedDirectory}/${appName}"
     mkdir ${appDir}
     log_debug "Le dossier de l'application a été créé au chemin suivant: ${appDir}"
-    create_env_then_clone_app ${appName} ${appDir}
+    cloneAddress="git@github.com:ursi-2020/example-app.git"
+    create_env_then_clone_app ${appName} ${appDir} ${cloneAddress}
     log_debug "Un code example d'application a été copié dans le dossier de l'application (${appDir})"
 
     envFile="${appDir}/variables.env"
@@ -104,7 +106,7 @@ pull_app() {
 
     appName=${1}
     appName_formatted=$(echo ${appName} | tr '-' '_')
-    git_adress=$(grep "^${appName}," ${gitListFile} | cut -d, -f2)
+    cloneAddress=$(grep "^${appName}," ${gitListFile} | cut -d, -f2)
     port=$(grep "^${appName}," ${gitListFile} | cut -d, -f3)
     appDir="${mountedDirectory}/${appName}"
     mkdir -p ${appDir}
@@ -115,7 +117,7 @@ pull_app() {
         sudo rm -rf "${venvDirectory}/${appName}_venv"
     fi
 
-    create_env_then_clone_app ${appName} ${appDir}
+    create_env_then_clone_app ${appName} ${appDir} ${cloneAddress}
     log_debug "Le dossier de l'application a été téléchargé au chemin suivant : ${appDir}"
 
     envFile="${appDir}/variables.env"

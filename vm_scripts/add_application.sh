@@ -13,7 +13,7 @@ then
     exit 1
 fi
 
-while [[ -z "$appName" ]] || [[ $(echo -n "$appName" | wc -m) -gt 30 ]] || [[ ! "$appName" =~ ^[a-z0-9_-]+$ ]]
+while [[ -z "$appName" ]] || [[ $(echo -n "$appName" | wc -m) -gt 30 ]] || [[ ! "$appName" =~ ^[A-Za-z0-9_-]+$ ]]
 do
     echo "Quel est le nom de la nouvelle application ? Le nom ne doit pas dépasser 30 caractères et ne comporter" \
     "que des caractères alphanumériques en minuscule"
