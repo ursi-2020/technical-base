@@ -9,6 +9,8 @@
  You need to register to the API, then you can send as musch files as you want to an app. You will be notified if a file  
  is sent to you and where to get the file.
  
+ ![import](./images/shema_drive.jpg)
+ 
  ## Route
  
  ### Register
