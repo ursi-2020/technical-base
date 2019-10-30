@@ -14,7 +14,7 @@
 ## Route
  
  To sending information to drive you will use the package **requests**  
- requests is a package that allow you to do **get** and **post** HTTP request  
+ requests is a package that allow you to do **GET** and **POST** HTTP request  
  Here is a guide of the library : https://realpython.com/python-requests/
 
 
@@ -36,7 +36,7 @@ with app : the name of the sender and path : the path of the file sent.
 concretely : 
 ```python
 r = requests.post('http://127.0.0.1:5001/register', data={'app': 'magasin',
-                                                              'path': 'C:\\app\\magasin\\file_to_send',
+                                                              'path': 'C:\\app\\magasin\\directory',
                                                               'route': 'http://127.0.0.1:5xxx/newfile'})
 ```
 
@@ -54,6 +54,8 @@ def newfile():
 
 ### Send
 
+ For sending a file just do a **POST** request to the drive.
+
 ```
 Route: '/send', methods=['POST']  
 Requires a json body:  
@@ -63,4 +65,9 @@ app : the name of the app you are sending the file
 path : the path of the file you want to send
 name_file : Optional but the name the file will get
 ```
- 
+concretely : 
+```python
+r = requests.post('http://127.0.0.1:5001/send', data={'me': 'magasin',
+                                                              'app': 'crm',
+                                                              'path': 'C:\\app\\magasin\\file_to_send'})
+```
