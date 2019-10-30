@@ -9,15 +9,16 @@
  Drive is a REST API you want to use for sending files.  
  
  ![import](./images/shema_drive.jpg)
- 
- 
-## Route 
+
+
+## Route
  
  To sending information to drive you will use the package **requests**  
  requests is a package that allow you to do **get** and **post** HTTP request  
  Here is a guide of the library : https://realpython.com/python-requests/
- 
-### Register 
+
+
+### Register
 
  You need as you see in the image before to register to the drive. When you register you
  need to give some information about you :  
