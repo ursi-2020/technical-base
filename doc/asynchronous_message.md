@@ -8,7 +8,7 @@ In the application A let's use a function that will catch asynchronous messages.
 
 First import the wrappers of queue manager:
 
-	import apipkg import queue_manager as queue
+	from apipkg import queue_manager as queue
 
 Go to the application `/asyncmsg/main.py` file.
 
