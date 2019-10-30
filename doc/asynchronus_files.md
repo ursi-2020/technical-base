@@ -15,7 +15,7 @@
  
  To sending information to drive you will use the package **requests**  
  requests is a package that allow you to do **GET** and **POST** HTTP request  
- Here is a guide of the library : https://realpython.com/python-requests/
+ Here is a guide of the library :  https://realpython.com/python-requests/  
 
 
 ### Register
@@ -40,7 +40,7 @@ r = requests.post('http://127.0.0.1:5001/register', data={'app': 'magasin',
                                                               'route': 'http://127.0.0.1:5xxx/newfile'})
 ```
 
-**don't forget to create your own route**  
+**don't forget to create your own route!**  
 Exemple :  
 ```python
 @app.route('/newfile', methods=['POST'])
