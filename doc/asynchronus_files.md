@@ -38,6 +38,17 @@ r = requests.post('http://127.0.0.1:5001/register', data={'app': 'magasin',
                                                               'route': 'http://127.0.0.1:5xxx/newfile'})
 ```
 
+**don't forget to create your own route**  
+Exemple :  
+```python
+@app.route('/newfile', methods=['POST'])
+def newfile():
+    req_data = request.get_json()
+
+    app = req_data['app'] # the name of the sender
+    path = req_data['path'] # the path where you will find the file
+    return 200
+```
 
 ### Send
 
