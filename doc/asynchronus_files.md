@@ -19,6 +19,8 @@
  
  ### Register 
 
+ You need as you see in the image before to register to the drive. When you register you
+ need to give some information about you :  
 ``` 
 Route: '/register', methods=['POST']  
 Requires a json body:  
@@ -29,6 +31,13 @@ route : the route wich Drive will call to tell you that a file was send to you. 
 as a POST method where we will send you a json body : {"app": "", "path": ""}  
 with app : the name of the sender and path : the path of the file sent.
 ```
+concretely : 
+```python
+r = requests.post('http://127.0.0.1:5001/register', data={'app': 'magasin',
+                                                              'path': 'C:\\app\\magasin\\file_to_send',
+                                                              'route': 'http://127.0.0.1:5xxx/newfile'})
+```
+
 
 ### Send
 
