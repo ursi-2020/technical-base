@@ -71,3 +71,12 @@ r = requests.post('http://127.0.0.1:5001/send', data={'me': 'magasin',
                                                               'app': 'crm',
                                                               'path': 'C:\\app\\magasin\\file_to_send'})
 ```
+
+### Manage
+
+  The queue systems will be launch with the scheduler, but for now, to test locally the drive app you need to start
+  yourself the queue systems by calling :
+  
+```python
+r = requests.post('http://127.0.0.1:5001/manage')
+```
