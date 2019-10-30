@@ -10,9 +10,14 @@
  
  ![import](./images/shema_drive.jpg)
  
- ## Route
  
- ### Register
+ ## Route 
+ 
+ To sending information to drive you will use the package **requests**  
+ requests is a package that allow you to do **get** and **post** HTTP request  
+ Here is a guide of the library : https://realpython.com/python-requests/
+ 
+ ### Register 
 
 ``` 
 Route: '/register', methods=['POST']  
