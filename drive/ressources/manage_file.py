@@ -6,17 +6,17 @@ from models import Send_files, App
 from db import db
 
 
-parser = reqparse.RequestParser()
-parser.add_argument('nb_files', type=int, required=True, help='Number of files to send')
+#parser = reqparse.RequestParser()
+#parser.add_argument('nb_files', type=int, required=True, help='Number of files to send')
 
 
 class Manage(Resource):
     def post(self):
-        args = parser.parse_args(strict=True)
-        nb = args['nb_files']
+        #args = parser.parse_args(strict=True)
+        #nb = args['nb_files']
         b = True
 
-        for i in range(0, nb):
+        for i in range(0, 100000):
             sender = Send_files.query.first()
             if sender is None:
                 continue
