@@ -10,6 +10,7 @@ parser.add_argument('app', type=str, required=True, help='Name of the app which 
 parser.add_argument('path', type=str, required=True, help='the path of the files you want to send')
 parser.add_argument('name_file', type=str, required=False, help='the name of the files -- optional')
 
+
 class Send(Resource):
     def post(self):
         args = parser.parse_args(strict=True)
@@ -34,5 +35,5 @@ class Send(Resource):
         db.session.commit()
 
         return Response(
-                response=json.dumps(dict(info='File successfully append to the sending queue')),
-                status=200, mimetype='application/json')
+            response=json.dumps(dict(info='File successfully append to the sending queue')),
+            status=200, mimetype='application/json')

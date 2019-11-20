@@ -11,5 +11,5 @@ api.add_resource(Manage, '/manage')
 
 if __name__ == '__main__':
     create_app()
-    # recreate_database()
+    recreate_database()
     app.run(host='0.0.0.0', port=5001)

@@ -2,10 +2,11 @@ import shutil
 import requests
 from datetime import datetime
 
-def write(name_sender, path_file_sender, name_file, reciever):
+
+def write(name_sender, path_file_sender, name_file, receiver):
     dateTimeObj = datetime.now()
     timestampStr = dateTimeObj.strftime("%d-%b-%Y-%H-%M-%S-%f")
-    path_to_send = reciever.path_folder + "/" + name_file + timestampStr
+    path_to_send = receiver.path_folder + "/" + name_file + timestampStr
     try:
         shutil.copyfile(path_file_sender, path_to_send)
         print("File copied successfully.")
@@ -26,5 +27,5 @@ def write(name_sender, path_file_sender, name_file, reciever):
     except:
         print("Error occurred while copying file.")
 
-    r = requests.post(reciever.route, data={'path': path_to_send, 'app': name_sender})
+    r = requests.post(receiver.route, data={'path': path_to_send, 'app': name_sender})
     return True

@@ -4,8 +4,6 @@ from flask import Response
 from models import App
 from db import db
 
-
-
 parser = reqparse.RequestParser()
 parser.add_argument('app', type=str, required=True, help='Name of your app')
 parser.add_argument('path', type=str, required=True, help='the path of the directory where you want to recieve'
@@ -15,7 +13,8 @@ parser.add_argument('route', type=str, required=True, help='the POST request dri
 
 
 class Register(Resource):
-    def post(self):
+    @staticmethod
+    def post():
         args = parser.parse_args(strict=True)
 
         app = App.query.filter_by(name=args['app']).first()
@@ -24,8 +23,11 @@ class Register(Resource):
                 response=json.dumps(dict(error='App exist, you are already registered with this name')),
                 status=400, mimetype='application/json')
 
-        new_app = App(name=args['name'], path_folder=args['path'],
-                                      route=args['route'])
+        try:
+            new_app = App(name=args['app'], path_folder=args['path'], route=args['route'])
+
+        except Exception as e:
+            print(e)
 
         db.session.add(new_app)
         db.session.commit()

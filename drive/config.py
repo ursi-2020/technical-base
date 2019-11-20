@@ -7,8 +7,7 @@ class Config:
     DEBUG = False
     SQLALCHEMY_ECHO = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = 'postgres+psycopg2://drive:6KXdrj99Q@localhost:5432/drive'
-    # A CHANGER POUR L"INTEGRATION DANS LA VM!!!
+    SQLALCHEMY_DATABASE_URI = 'postgres+psycopg2://drive:6KXdrj99Q@127.0.0.1:5432/drive'
 
 
 class ProductionConfig(Config):
