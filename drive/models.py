@@ -11,6 +11,7 @@ class App(OutputMixin, db.Model):
     path_folder = db.Column(db.String, nullable=False)
     route = db.Column(db.String, nullable=False)
 
+
 class Send_files(OutputMixin, db.Model):
     __tablename__ = 'Send_files'
     id = db.Column(db.Integer, primary_key=True)
