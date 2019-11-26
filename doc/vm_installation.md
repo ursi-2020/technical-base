@@ -3,7 +3,7 @@
 # VM installation:
 
 - Download the latest version of [VirtualBox](https://www.virtualbox.org/).
-- Download the [image](https://drive.google.com/open?id=1BLdizHalsrjGGgURnuTWLhyDRu_kr73Z) of the VM.
+- Download the [image](https://drive.google.com/file/d/1PZfTkWLkiT3patXQNu5PYSk_HQwvGkIC/view?usp=sharing) of the VM.
 - Launch VirtualBox.
 - Import a new VM.
 
