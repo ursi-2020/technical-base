@@ -17,7 +17,10 @@ class Register(Resource):
     def post():
         args = parser.parse_args(strict=True)
 
-        app = App.query.filter_by(name=args['app']).first()
+        try:
+            app = App.query.filter_by(name=args['app']).first()
+        except Exception as e:
+            print(e)
         if app is not None:
             return Response(
                 response=json.dumps(dict(error='App exist, you are already registered with this name')),
