@@ -27,7 +27,7 @@ class Send(Resource):
                 response=json.dumps(dict(error='App doesn\'t exist or did not register in our drive')),
                 status=400, mimetype='application/json')
 
-        name_file = args['name_files'] if args['name_files'] is not None else args['me']
+        name_file = args['name_file'] if args['name_file'] is not None else args['me']
         new_file_to_send = Send_files(name_app_sending=args['me'], name_app_receive=args['app'],
                                       path_file=args['path'], name_new_file=name_file)
 
