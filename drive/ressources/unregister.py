@@ -23,6 +23,8 @@ class Unregister(Resource):
                 status=400, mimetype='application/json')
 
         send = Send_files.query.filter_by(name_app_sending=args['app']).first()
+        db.session.delete(app)
+        db.session.commit()
 
         if send is None:
             return Response(
@@ -32,8 +34,7 @@ class Unregister(Resource):
         db.session.delete(send)
         db.session.commit()
 
-        db.session.delete(app)
-        db.session.commit()
+
 
 
         return Response(

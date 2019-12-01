@@ -16,7 +16,7 @@ class Manage(Resource):
         #nb = args['nb_files']
         b = True
 
-        for i in range(0, 10):
+        for i in range(0, 1000):
             sender = Send_files.query.first()
             if sender is None:
                 continue
