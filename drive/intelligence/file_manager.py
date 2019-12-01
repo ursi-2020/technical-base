@@ -5,7 +5,7 @@ from datetime import datetime
 def extension(str):
     res = str.split('.')
     if (len(res) > 1) :
-        return res[-1]
+        return "." + res[-1]
     return ""
 
 def write(name_sender, path_file_sender, name_file, receiver):
