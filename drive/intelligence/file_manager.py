@@ -5,7 +5,7 @@ from datetime import datetime
 
 def write(name_sender, path_file_sender, name_file, receiver):
     dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y-%H-%M-%S-%f")
+    timestampStr = dateTimeObj.strftime("%d-%b-%Y-%H-%M")
     path_to_send = receiver.path_folder + "/" + name_file + timestampStr
     try:
         shutil.copyfile(path_file_sender, path_to_send)
