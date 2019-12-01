@@ -16,13 +16,14 @@ class Manage(Resource):
         #nb = args['nb_files']
         b = True
 
-        for i in range(0, 100000):
+        for i in range(0, 10):
             sender = Send_files.query.first()
             if sender is None:
                 continue
             reciever = App.query.filter_by(name=sender.name_app_receive).first()
             b = b and write(sender.name_app_sending, sender.path_file, sender.name_new_file, reciever)
-            Send_files.query.first().delete()
+            dele = Send_files.query.first()
+            db.session.delete(dele)
             db.session.commit()
         if b:
             return Response(
