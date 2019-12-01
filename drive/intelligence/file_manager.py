@@ -2,11 +2,16 @@ import shutil
 import requests
 from datetime import datetime
 
+def extension(str):
+    res = str.split('.')
+    if (len(res) > 1) :
+        return res[-1]
+    return ""
 
 def write(name_sender, path_file_sender, name_file, receiver):
     dateTimeObj = datetime.now()
     timestampStr = dateTimeObj.strftime("%d-%b-%Y-%H-%M")
-    path_to_send = receiver.path_folder + "/" + name_file + timestampStr
+    path_to_send = receiver.path_folder + "/" + name_file + timestampStr + extension(path_file_sender)
     fichier = open("/tmp/log_drive.txt", "a")
     try:
         shutil.copyfile(path_file_sender, path_to_send)
