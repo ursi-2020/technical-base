@@ -7,7 +7,7 @@ def write(name_sender, path_file_sender, name_file, receiver):
     dateTimeObj = datetime.now()
     timestampStr = dateTimeObj.strftime("%d-%b-%Y-%H-%M")
     path_to_send = receiver.path_folder + "/" + name_file + timestampStr
-    fichier = open("log.txt", "a")
+    fichier = open("/tmp/log_drive.txt", "a")
     try:
         shutil.copyfile(path_file_sender, path_to_send)
         print("File copied successfully.")
