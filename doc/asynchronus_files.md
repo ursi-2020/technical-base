@@ -52,6 +52,21 @@ def newfile():
     return 200
 ```
 
+### Unregister
+
+A simple route to unregister your app, useful in some case
+
+``` 
+Route: '/unregister', methods=['POST']  
+Requires a json body:  
+{"app": ""}  
+app : the name of your app  
+```
+concretely : 
+```python
+r = requests.post('http://127.0.0.1:5001/unregister', data={'app': 'magasin'})
+```
+
 ### Send
 
  For sending a file just do a **POST** request to the drive.
