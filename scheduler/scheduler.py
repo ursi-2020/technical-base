@@ -26,7 +26,7 @@ class Scheduler:
     def __init__(self):
         self.fake_clock = clock.Clock(speed=50)
 
-    def schedule(self, url: str, target_app: str, trigger_time: str, recurrence: str, data: str, name: str, source_app: str) -> bool:
+    def schedule(self, url: str, target_app: str, trigger_time: str, recurrence: str, data: str, name: str, source_app: str, bypass_kong: str = "") -> bool:
         try:
             scheduled_datetime = datetime.strptime(trigger_time, self.time_format)
         except ValueError as e:
@@ -46,7 +46,8 @@ class Scheduler:
         if source_app is None:
             source_app = "Unknown"
 
-        self.schedule_list.add((scheduled_datetime, url, target_app, recurrence, data, name, source_app))
+        bypass_kong = False if bypass_kong is None or bypass_kong != "on" or bypass_kong == "" else True
+        self.schedule_list.add((scheduled_datetime, url, target_app, recurrence, data, name, source_app, bypass_kong))
         self.schedule_logger.info("Scheduling action: [TIME_REQUIRED=" + str(scheduled_datetime) + "][TIME_CURRENT=" + str(self.fake_clock.get_time()) + "][TARGET=" + str(url) + "]")
 
         return True
@@ -111,7 +112,7 @@ class Scheduler:
         time = self.fake_clock.get_time()
         self.schedule_logger.info("Triggering action: [TIME_REQUIRED=" + str(action[0]) + "][TIME_CURRENT=" + str(time) + "][TARGET=" + str(action[1]) + "]")
         headers = {'Host': action[2]}
-        url = api.api_services_url + action[1]
+        url = api.api_services_url + action[1] if not action[7] else action[1]
         try:
             requests.post(url, data=action[4], headers=headers)
         except Exception as e:
@@ -121,5 +122,5 @@ class Scheduler:
         if action[3] == self.recurrences[0]:
             return
         move = timedelta(days=(action[3] == 'day'), minutes=(action[3] == 'minute'), hours=(action[3] == 'hour'), weeks=(action[3] == 'week'))
-        self.schedule_list.add((action[0] + move, action[1], action[2], action[3], action[4], action[5], action[6]))
+        self.schedule_list.add((action[0] + move, action[1], action[2], action[3], action[4], action[5], action[6], action[7]))
         self.schedule_logger.info("RE Scheduling action: [TIME_REQUIRED=" + str(action[0] + move) + "][TIME_CURRENT=" + str(self.fake_clock.get_time()) + "][TARGET=" + action[2] + action[1] + "]")

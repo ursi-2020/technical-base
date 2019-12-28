@@ -161,7 +161,7 @@ def schedule_message():
         logger.warning("Invalid HTTP request [Method = " + request.method + ", URL = " + request.url + "] time field not found.")
         abort(422)
     result = sch.schedule(parameters.get('target_url'), parameters.get('target_app'), parameters.get('time'), parameters.get('recurrence'), parameters.get('data'), parameters.get('name'),
-                          parameters.get('source_app'))
+                          parameters.get('source_app'), parameters.get('bypass_kong'))
     if not result:
         logger.warning("Invalid HTTP request [Method = " + request.method + ", URL = " + request.url + "] Invalid fields.")
         abort(422)
@@ -177,7 +177,7 @@ def schedule_message():
 def schedule_form():
     add_request(request, "Schedule", "Schedule a task with a form.")
     form = request.form
-    result = sch.schedule(form['url'], form['target'], form['time'], form['recurrence'], form['data'], form['name'], 'scheduler')
+    result = sch.schedule(form['url'], form['target'], form['time'], form['recurrence'], form['data'], form['name'], 'scheduler', form.get('kong'))
     if not result:
         logger.warning("Invalid HTTP request [Method = " + request.method + ", URL = " + request.url + "] Invalid fields.")
         abort(422)

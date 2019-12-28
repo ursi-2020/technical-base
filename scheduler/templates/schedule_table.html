@@ -12,7 +12,11 @@
     <tbody>
     {% for item in scheduled_list %}
         <tr>
-            <th scope="row">{{ item[5] }}</th>
+            {% if not item[7] %}
+                <th scope="row">{{ item[5] }}</th>
+            {% else %}
+                <th scope="row" style="color: red">{{ item[5] }}</th>
+            {% endif %}
             <td>{{ item[6] }}</td>
             <td>{{ item[2] }}{{ item[1] }}</td>
             <td>{{ item[0] }}</td>
